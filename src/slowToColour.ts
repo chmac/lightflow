@@ -1,5 +1,5 @@
-import { Hue, HueUPNPResponse, Lamp, XYPoint } from "hue-hacking-node";
-import eachSeries from "async/eachSeries";
+import { Hue, HueUPNPResponse, Lamp, XYPoint, RGB } from "hue-hacking-node";
+import { eachSeries, timesSeries } from "async";
 
 import { HUE_USERNAME } from "../config/private";
 
@@ -11,6 +11,10 @@ const TARGET_LIGHTS = [
   "White Stand Light",
   "Black Stand Light"
 ];
+const TARGET_COLOUR = new RGB(255, 0, 0);
+const TARGET_TIME = 30 * 1e3; // 30s
+const STEP_INTERVAL = 2 * 1e3; // 2s
+const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
 
 const getBridgeIp = async () => {
   const foundBridges: HueUPNPResponse[] = await Hue.search();
@@ -96,25 +100,75 @@ const getLampColour = async (hueIndex: number) => {
   throw new Error("Lamp has no colour #FncbSE");
 };
 
+const nextStepBetweenColours = ({
+  currentColour,
+  targetColour,
+  remainingSteps
+}: {
+  currentColour: RGB;
+  targetColour: RGB;
+  remainingSteps: number;
+}) => {
+  const newRGB = ["r", "g", "b"].map((colour): number => {
+    const start = currentColour[colour];
+    const end = targetColour[colour];
+    const difference = end - start;
+    const add = difference / remainingSteps;
+    const newColour = Math.round(start + add);
+    return newColour;
+  });
+  return new RGB(newRGB[0], newRGB[1], newRGB[2]);
+};
+
+const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
+  await eachSeries(targetIndexes, async index => {
+    // await hue.flash(index);
+    const currentColour = await getLampColour(index);
+    const newColour = nextStepBetweenColours({
+      currentColour,
+      targetColour: TARGET_COLOUR,
+      remainingSteps
+    });
+
+    if (DEBUG)
+      console.log(
+        "Colour transitions #oTYDwI",
+        index,
+        currentColour,
+        newColour,
+        remainingSteps
+      );
+
+    await hue.setColor(index, newColour.toCssString());
+  });
+
+  remainingSteps--;
+  console.log(`Step completed #Hm1wK0, remaining steps: ${remainingSteps}`);
+};
+
 const start = async () => {
   const hue = await getHue();
 
   const targetIndexes = await getLightIndexesByNamees(TARGET_LIGHTS);
-  console.log("targetIndex", targetIndexes);
-  // await hue.turnOff(targetIndex);
-  // console.log("offed");
+  if (DEBUG) console.log("targetIndex", targetIndexes);
 
-  await eachSeries(targetIndexes, async index => {
-    // await hue.flash(index);
-    const colour = await getLampColour(index);
-    console.log("Current colour #oTYDwI", index, colour);
-    // console.log("Flashed #gzcUwE", index);
-  });
-
-  // hue.setColor(targetIndex, "red");
-  // console.log("red");
-
-  // console.log("args", process.argv);
+  timesSeries(
+    TOTAL_STEPS,
+    async step => {
+      const remainingSteps = TOTAL_STEPS - step;
+      await nextStep(targetIndexes, remainingSteps);
+      return new Promise(resolve => {
+        setTimeout(resolve, STEP_INTERVAL);
+      });
+    },
+    error => {
+      if (error) {
+        throw error;
+      } else {
+        console.log("timesSeries complete #7CtSVA");
+      }
+    }
+  );
 };
 
 const run = async () => {
