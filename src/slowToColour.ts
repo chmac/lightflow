@@ -156,7 +156,9 @@ const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
   });
 
   console.log(
-    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${TOTAL_STEPS}`
+    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${TOTAL_STEPS} (${(remainingSteps *
+      STEP_INTERVAL) /
+      1e3}s remaining)`
   );
 };
 
