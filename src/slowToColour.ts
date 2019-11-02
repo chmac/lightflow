@@ -100,7 +100,7 @@ const getLampByHueIndex = async (hueIndex: number): Promise<Lamp> => {
 const getLampColour = async (hueIndex: number) => {
   const lamp = await getLampByHueIndex(hueIndex);
 
-  if (DEBUG) console.log("lamp colour #1cHx7a", lamp.state.xy, lamp.state.bri);
+  if (DEBUG) console.log("Lamp colour #1cHx7a", lamp.state.xy, lamp.state.bri);
 
   if (!!lamp.state.xy && !!lamp.state.bri) {
     return new XYPoint(lamp.state.xy[0], lamp.state.xy[1]);
