@@ -155,7 +155,6 @@ const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
     await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
   });
 
-  remainingSteps--;
   console.log(
     `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${TOTAL_STEPS}`
   );
