@@ -21,8 +21,8 @@ const TARGET_LIGHTS = [
   "Black Stand Light"
 ];
 const TARGET_COLOUR = colours.rgbToCIE1931(new RGB(255, 0, 0));
-const TARGET_TIME = 30 * 1e3; // 30s
-const STEP_INTERVAL = 2 * 1e3; // 2s
+const TARGET_TIME = 30 * 60 * 1e3; // 30m
+const STEP_INTERVAL = 10 * 1e3; // 10s
 const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
 
 const getBridgeIp = async () => {
