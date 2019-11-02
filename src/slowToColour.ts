@@ -78,10 +78,12 @@ const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
     throw new Error("Failed to find lights #ckxRtG");
   }
 
-  console.log("Got light indexes #XljJyD");
-  indexes.forEach(index => {
-    console.log("Light state #qQ5v49", lights[index - 1].state);
-  });
+  if (DEBUG) {
+    console.log("Got light indexes #XljJyD");
+    indexes.forEach(index => {
+      console.log("Light state #qQ5v49", lights[index - 1].state);
+    });
+  }
 
   return indexes;
 };
@@ -154,7 +156,9 @@ const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
   });
 
   remainingSteps--;
-  console.log(`Step completed #Hm1wK0, remaining steps: ${remainingSteps}`);
+  console.log(
+    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${TOTAL_STEPS}`
+  );
 };
 
 const start = async () => {
