@@ -8,21 +8,18 @@ import {
 } from "hue-hacking-node";
 import { eachSeries, timesSeries } from "async";
 
-import { HUE_USERNAME } from "../config/private";
+import {
+  HUE_USERNAME,
+  TARGET_LIGHTS,
+  TARGET_TIME,
+  STEP_INTERVAL
+} from "../config/private";
 
 const colours = new HueColors();
 
 const DEBUG = true;
 
-const TARGET_LIGHTS = [
-  "Right Light",
-  "Left Light",
-  "White Stand Light",
-  "Black Stand Light"
-];
 const TARGET_COLOUR = colours.rgbToCIE1931(new RGB(255, 0, 0));
-const TARGET_TIME = 30 * 60 * 1e3; // 30m
-const STEP_INTERVAL = 10 * 1e3; // 10s
 const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
 
 const getBridgeIp = async () => {
