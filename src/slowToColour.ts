@@ -1,7 +1,16 @@
-import { Hue, HueUPNPResponse, Lamp, XYPoint, RGB } from "hue-hacking-node";
+import {
+  Hue,
+  HueUPNPResponse,
+  Lamp,
+  XYPoint,
+  RGB,
+  HueColors
+} from "hue-hacking-node";
 import { eachSeries, timesSeries } from "async";
 
 import { HUE_USERNAME } from "../config/private";
+
+const colours = new HueColors();
 
 const DEBUG = true;
 
@@ -11,7 +20,7 @@ const TARGET_LIGHTS = [
   "White Stand Light",
   "Black Stand Light"
 ];
-const TARGET_COLOUR = new RGB(255, 0, 0);
+const TARGET_COLOUR = colours.rgbToCIE1931(new RGB(255, 0, 0));
 const TARGET_TIME = 30 * 1e3; // 30s
 const STEP_INTERVAL = 2 * 1e3; // 2s
 const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
@@ -92,10 +101,7 @@ const getLampColour = async (hueIndex: number) => {
   if (DEBUG) console.log("lamp colour #1cHx7a", lamp.state.xy, lamp.state.bri);
 
   if (!!lamp.state.xy && !!lamp.state.bri) {
-    return hue.colors.CIE1931ToRGB(
-      new XYPoint(lamp.state.xy[0], lamp.state.xy[1]),
-      lamp.state.bri
-    );
+    return new XYPoint(lamp.state.xy[0], lamp.state.xy[1]);
   }
   throw new Error("Lamp has no colour #FncbSE");
 };
@@ -105,30 +111,35 @@ const nextStepBetweenColours = ({
   targetColour,
   remainingSteps
 }: {
-  currentColour: RGB;
-  targetColour: RGB;
+  currentColour: XYPoint;
+  targetColour: XYPoint;
   remainingSteps: number;
 }) => {
-  const newRGB = ["r", "g", "b"].map((colour): number => {
+  const xy = ["x", "y"].map((colour): number => {
     const start = currentColour[colour];
     const end = targetColour[colour];
     const difference = end - start;
     const add = difference / remainingSteps;
-    const newColour = Math.round(start + add);
+    const newColour = start + add;
     return newColour;
   });
-  return new RGB(newRGB[0], newRGB[1], newRGB[2]);
+  return new XYPoint(...xy);
 };
+
+let lastColour: XYPoint[] = [];
 
 const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
   await eachSeries(targetIndexes, async index => {
     // await hue.flash(index);
-    const currentColour = await getLampColour(index);
+    const currentColour = !!lastColour[index - 1]
+      ? lastColour[index - 1]
+      : await getLampColour(index);
     const newColour = nextStepBetweenColours({
       currentColour,
       targetColour: TARGET_COLOUR,
       remainingSteps
     });
+    lastColour[index - 1] = newColour;
 
     if (DEBUG)
       console.log(
@@ -139,7 +150,7 @@ const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
         remainingSteps
       );
 
-    await hue.setColor(index, newColour.toCssString());
+    await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
   });
 
   remainingSteps--;
