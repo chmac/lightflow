@@ -3,7 +3,6 @@ import {
   HueUPNPResponse,
   Lamp,
   XYPoint,
-  RGB,
   HueColors
 } from "hue-hacking-node";
 import { eachSeries, timesSeries } from "async";
@@ -11,51 +10,18 @@ import { eachSeries, timesSeries } from "async";
 import {
   HUE_USERNAME,
   TARGET_LIGHTS,
+  TARGET_COLOUR,
   TARGET_TIME,
   STEP_INTERVAL
 } from "../config/private";
+
+import { getHue, getLamps } from "./utils";
 
 const colours = new HueColors();
 
 const DEBUG = true;
 
-const TARGET_COLOUR = colours.rgbToCIE1931(new RGB(255, 0, 0));
 const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
-
-const getBridgeIp = async () => {
-  const foundBridges: HueUPNPResponse[] = await Hue.search();
-
-  if (foundBridges.length !== 1) {
-    console.error("Failed to find bridges #t83u5l", foundBridges);
-    throw new Error("Failed to find exactly one bridge #JMvJyo");
-  }
-
-  return foundBridges[0].internalipaddress;
-};
-
-let hue: Hue;
-
-const getHue = async () => {
-  if (!hue) {
-    const ip = await getBridgeIp();
-    hue = new Hue({
-      ip,
-      key: HUE_USERNAME
-    });
-  }
-
-  return hue;
-};
-
-let lamps: Lamp[];
-
-const getLamps = async () => {
-  const hue = await getHue();
-  if (!lamps) {
-    lamps = await hue.getLamps();
-  }
-  return lamps;
-};
 
 const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
   const lights = await getLamps();
@@ -127,7 +93,11 @@ const nextStepBetweenColours = ({
 
 let lastColour: XYPoint[] = [];
 
-const nextStep = async (targetIndexes: number[], remainingSteps: number) => {
+const nextStep = async (
+  targetIndexes: number[],
+  remainingSteps: number,
+  hue
+) => {
   await eachSeries(targetIndexes, async index => {
     // await hue.flash(index);
     const currentColour = !!lastColour[index - 1]
@@ -169,7 +139,7 @@ const start = async () => {
     TOTAL_STEPS,
     async step => {
       const remainingSteps = TOTAL_STEPS - step;
-      await nextStep(targetIndexes, remainingSteps);
+      await nextStep(targetIndexes, remainingSteps, hue);
       return new Promise(resolve => {
         setTimeout(resolve, STEP_INTERVAL);
       });
@@ -192,5 +162,15 @@ const run = async () => {
     process.exit();
   }
 };
+
+export const toColour = ({
+  hue,
+  targetColour,
+  durationMs
+}: {
+  hue: Hue;
+  targetColour: string;
+  durationMs: number;
+}) => {};
 
 run();
