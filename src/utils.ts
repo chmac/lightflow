@@ -1,3 +1,7 @@
+import { Hue, Lamp, HueUPNPResponse } from "hue-hacking-node";
+
+import { HUE_USERNAME } from "./config/private";
+
 export const getBridgeIp = async () => {
   const foundBridges: HueUPNPResponse[] = await Hue.search();
 
@@ -23,12 +27,22 @@ export const getHue = async () => {
   return hue;
 };
 
-let lamps: Lamp[];
+type LampWithIndex = Lamp & {
+  index: number;
+};
+const addIndexToLamp = (lamp: Lamp, index: number): LampWithIndex => {
+  // NOTE: We add 1 to the `index` because the array is zero indexed by the Hue
+  // result and operations are all 1 indexed.
+  return { ...lamp, index: index + 1 };
+};
+
+let lamps: LampWithIndex[];
 
 export const getLamps = async () => {
   const hue = await getHue();
   if (!lamps) {
-    lamps = await hue.getLamps();
+    lamps = (await hue.getLamps()).map(addIndexToLamp);
   }
+
   return lamps;
 };
