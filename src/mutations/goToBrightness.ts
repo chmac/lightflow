@@ -36,7 +36,7 @@ const startRunToBrightness = async ({
 }) => {
   const totalSteps = Math.ceil(timeMs / STEP_INTERVAL);
 
-  const lights = await getLights();
+  const lights = await hue.getLamps();
   let lastBrightness = {};
 
   timesSeries(
