@@ -33,6 +33,7 @@ let lamps: Lamp[];
 // lights, so we use the Hue naming and wrap the underlying methods.
 export const getLights = async () => {
   const hue = await getHue();
+  return hue.getLamps();
   if (!lamps) {
     lamps = await hue.getLamps();
   }
