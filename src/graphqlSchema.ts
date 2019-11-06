@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import { Hue } from "hue-hacking-node";
+import { Hue, Lamp } from "hue-hacking-node";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
@@ -81,6 +81,9 @@ type GoToColourInputArgs = {
 
 const makeResolvers = ({ hue }) => {
   return {
+    Light: {
+      hueIndex: (light: Lamp) => light.lampIndex
+    },
     Query: {
       lights: async (root, args: LightsArgs) => {
         const { name } = args;
