@@ -119,7 +119,8 @@ const nextStep = async (
         remainingSteps
       );
 
-    await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
+    // await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
+    await hue.setColor(index, newColour);
   });
 
   console.log(
