@@ -28,17 +28,19 @@ export const getHue = async () => {
 };
 
 type LampWithIndex = Lamp & {
-  index: number;
+  hueIndex: number;
 };
 const addIndexToLamp = (lamp: Lamp, index: number): LampWithIndex => {
   // NOTE: We add 1 to the `index` because the array is zero indexed by the Hue
   // result and operations are all 1 indexed.
-  return { ...lamp, index: index + 1 };
+  return { ...lamp, hueIndex: index + 1 };
 };
 
 let lamps: LampWithIndex[];
 
-export const getLamps = async () => {
+// NOTE: The `hue-hacking-node` package calls them Lamps, but Hue calls them
+// lights, so we use the Hue naming and wrap the underlying methods.
+export const getLights = async () => {
   const hue = await getHue();
   if (!lamps) {
     lamps = (await hue.getLamps()).map(addIndexToLamp);
