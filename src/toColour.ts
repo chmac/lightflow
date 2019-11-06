@@ -1,27 +1,11 @@
-import {
-  Hue,
-  HueUPNPResponse,
-  Lamp,
-  XYPoint,
-  HueColors
-} from "hue-hacking-node";
+import { Hue, Lamp, XYPoint } from "hue-hacking-node";
 import { eachSeries, timesSeries } from "async";
 
-import {
-  HUE_USERNAME,
-  TARGET_LIGHTS,
-  TARGET_COLOUR,
-  TARGET_TIME,
-  STEP_INTERVAL
-} from "./config/private";
+import { STEP_INTERVAL } from "./config/private";
 
-import { getHue, getLights } from "./utils";
-
-const colours = new HueColors();
+import { getLights } from "./utils";
 
 const DEBUG = true;
-
-const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
 
 const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
   const lights = await getLights();
