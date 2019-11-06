@@ -13,9 +13,9 @@ import {
   TARGET_COLOUR,
   TARGET_TIME,
   STEP_INTERVAL
-} from "../config/private";
+} from "./config/private";
 
-import { getHue, getLamps } from "./utils";
+import { getHue, getLights } from "./utils";
 
 const colours = new HueColors();
 
@@ -24,7 +24,7 @@ const DEBUG = true;
 const TOTAL_STEPS = TARGET_TIME / STEP_INTERVAL;
 
 const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
-  const lights = await getLamps();
+  const lights = await getLights();
 
   const indexes = names.reduce((final: number[], name): number[] => {
     const index = lights.findIndex(light => {
@@ -52,7 +52,7 @@ const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
 };
 
 const getLampByHueIndex = async (hueIndex: number): Promise<Lamp> => {
-  const lamps = await getLamps();
+  const lamps = await getLights();
   const lamp = lamps[hueIndex - 1];
   if (!lamp) {
     throw new Error(`Could not find lamp #akrrNk, hueIndex: ${hueIndex}`);
