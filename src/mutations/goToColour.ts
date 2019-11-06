@@ -16,7 +16,12 @@ export const goToColour = async ({
   colour: string;
   timeMinutes: number;
 }) => {
-  toColour({ hue, hueIndexes, targetColour: hue.colors.hexToCIE1931(colour) });
+  toColour({
+    hue,
+    hueIndexes,
+    targetColour: hue.colors.getCIEColor(colour),
+    timeMs: timeMinutes * 60 * 1e3
+  });
 
   return {
     success: true
