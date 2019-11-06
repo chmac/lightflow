@@ -1190,10 +1190,10 @@ http-errors@^1.7.0, http-errors@^1.7.3, http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-hue-hacking-node@^1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/hue-hacking-node/-/hue-hacking-node-1.3.4.tgz#4cb8a988439a3c77dee3f5e4acb9e50a66e16120"
-  integrity sha512-80Cz+pA3vAYbeU1gRnU+637jkJrsF5quEQb8g9nSAmnw+fQkV6x8VgJks8H9suAGO3qi9WMok9jdn1DkPvc4pA==
+hue-hacking-node@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/hue-hacking-node/-/hue-hacking-node-1.4.0.tgz#eb72ac665238603034371dc4c1c60c809b495627"
+  integrity sha512-QYWFpaQ61CTZ+uX34G1Y6g/t11J6xkC9m+zTgSaLcQF4gOrT8rytM1/xWg2yf/GNzixJEAVUSNxNsJ3gP+9LXQ==
   dependencies:
     axios "^0.19.0"
 
