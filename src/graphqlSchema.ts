@@ -18,8 +18,9 @@ type Light {
   state: LightState!
 }
 
+
 type Query {
-  lights: [Light]
+  lights(name: String): [Light]
 }
 
 input GoToColourInput {
@@ -68,6 +69,10 @@ type Mutation {
 }
 `;
 
+type LightsArgs = {
+  name?: string;
+};
+
 type GoToColourInputArgs = {
   hueIndexes: number[];
   colour: string;
@@ -77,7 +82,16 @@ type GoToColourInputArgs = {
 const makeResolvers = ({ hue }) => {
   return {
     Query: {
-      lights: getLights
+      lights: async (root, args: LightsArgs) => {
+        const { name } = args;
+        const lights = await getLights();
+        if (!!name) {
+          return lights.filter(
+            light => light.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          );
+        }
+        return lights;
+      }
     },
     Mutation: {
       goToColour: async (root, args: { input: GoToColourInputArgs }) => {
