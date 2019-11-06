@@ -97,11 +97,13 @@ const nextStep = async ({
   targetIndexes,
   targetColour,
   remainingSteps,
+  totalSteps,
   hue
 }: {
   targetIndexes: number[];
   targetColour: XYPoint;
   remainingSteps: number;
+  totalSteps: number;
   hue: Hue;
 }) => {
   await eachSeries(targetIndexes, async index => {
@@ -128,7 +130,7 @@ const nextStep = async ({
   });
 
   console.log(
-    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${TOTAL_STEPS} (${(remainingSteps *
+    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${totalSteps} (${(remainingSteps *
       STEP_INTERVAL) /
       1e3}s remaining)`
   );
@@ -137,19 +139,30 @@ const nextStep = async ({
 export const toColour = async ({
   hue,
   hueIndexes: targetIndexes,
-  targetColour
+  targetColour,
+  timeMs
 }: {
   hue: Hue;
   hueIndexes: number[];
   targetColour: XYPoint;
+  timeMs: number;
 }) => {
-  if (DEBUG) console.log("targetIndex #TUAzvL", targetIndexes);
+  if (DEBUG)
+    console.log("toColour #TUAzvL", targetIndexes, targetColour, timeMs);
+
+  const totalSteps = Math.ceil(timeMs / STEP_INTERVAL);
 
   timesSeries(
-    TOTAL_STEPS,
+    totalSteps,
     async step => {
-      const remainingSteps = TOTAL_STEPS - step;
-      await nextStep({ targetIndexes, remainingSteps, hue, targetColour });
+      const remainingSteps = totalSteps - step;
+      await nextStep({
+        targetIndexes,
+        remainingSteps,
+        totalSteps,
+        hue,
+        targetColour
+      });
       return new Promise(resolve => {
         setTimeout(resolve, STEP_INTERVAL);
       });
