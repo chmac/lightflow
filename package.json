@@ -2,8 +2,12 @@
   "name": "lightflow",
   "version": "1.0.0",
   "description": "Animating hue lights slowly",
-  "main": "index.js",
   "repository": "git@github.com:chmac/lightflow.git",
+  "scripts": {
+    "start": "NODE_ENV='development' nodemon",
+    "debug": "NODE_ENV='debug' nodemon",
+    "build": "tsc"
+  },
   "author": "Callum Macdonald <git@callum-macdonald.com>",
   "license": "GPLv3",
   "dependencies": {
@@ -18,6 +22,8 @@
   },
   "devDependencies": {
     "@types/node": "^12.12.5",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   }
 }
