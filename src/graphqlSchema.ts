@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import { Hue, Lamp } from "hue-hacking-node";
+import { Hue, Lamp, States } from "hue-hacking-node";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
@@ -10,6 +10,13 @@ type LightState {
   "The colour mode this lamp is currently set to. Only for lamps which support colours."
   colormode: String
   reachable: Boolean!
+  "The Hue field \`bri\`, lamp brightness, from 0-255."
+  brightness: Int
+  hue: Int
+  saturation: Int
+  xy: [Float]
+  "The Hue field \`ct\`, lamp colour temperature"
+  colourTemperature: Int
 }
 
 type Light {
@@ -79,8 +86,15 @@ type GoToColourInputArgs = {
   timeMinutes: number;
 };
 
+const getProp = name => val => val[name];
+
 const makeResolvers = ({ hue }) => {
   return {
+    LightState: {
+      brightness: getProp("bri"),
+      colourTemperature: getProp("ct"),
+      saturation: getProp("sat")
+    },
     Light: {
       hueIndex: (light: Lamp) => light.lampIndex
     },
