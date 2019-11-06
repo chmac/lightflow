@@ -1,7 +1,7 @@
 import { Hue, Lamp, XYPoint } from "hue-hacking-node";
 import { eachSeries, timesSeries } from "async";
 
-import { STEP_INTERVAL } from "./config/private";
+import { STEP_INTERVAL_MS } from "./config/private";
 
 import { getLights } from "./utils";
 
@@ -115,7 +115,7 @@ const nextStep = async ({
 
   console.log(
     `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${totalSteps} (${(remainingSteps *
-      STEP_INTERVAL) /
+      STEP_INTERVAL_MS) /
       1e3}s remaining)`
   );
 };
@@ -134,7 +134,7 @@ export const toColour = async ({
   if (DEBUG)
     console.log("toColour #TUAzvL", targetIndexes, targetColour, timeMs);
 
-  const totalSteps = Math.ceil(timeMs / STEP_INTERVAL);
+  const totalSteps = Math.ceil(timeMs / STEP_INTERVAL_MS);
 
   timesSeries(
     totalSteps,
@@ -148,7 +148,7 @@ export const toColour = async ({
         targetColour
       });
       return new Promise(resolve => {
-        setTimeout(resolve, STEP_INTERVAL);
+        setTimeout(resolve, STEP_INTERVAL_MS);
       });
     },
     error => {

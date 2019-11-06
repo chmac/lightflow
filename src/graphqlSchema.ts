@@ -3,6 +3,7 @@ import { Hue, Lamp, States, XYPoint } from "hue-hacking-node";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
+import { goToBrightness } from "./mutations/goToBrightness";
 
 const typeDefs = `
 type LightState {
@@ -88,6 +89,12 @@ type GoToColourInputArgs = {
   timeMinutes: number;
 };
 
+type GoToBrightnessInputArgs = {
+  hueIndexes: number[];
+  brightness: number;
+  timeMinutes: number;
+};
+
 const getProp = name => val => val[name];
 
 const makeResolvers = ({ hue }: { hue: Hue }) => {
@@ -120,6 +127,13 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
       goToColour: async (root, args: { input: GoToColourInputArgs }) => {
         const { hueIndexes, colour, timeMinutes } = args.input;
         return goToColour({ hue, hueIndexes, colour, timeMinutes });
+      },
+      goToBrightness: async (
+        root,
+        args: { input: GoToBrightnessInputArgs }
+      ) => {
+        const { hueIndexes, brightness, timeMinutes } = args.input;
+        return goToBrightness({ hue, hueIndexes, brightness, timeMinutes });
       }
     }
   };
