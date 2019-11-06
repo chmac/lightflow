@@ -1,4 +1,5 @@
-import { Hue } from "hue-hacking-node";
+import { Hue, HueColors } from "hue-hacking-node";
+import { toColour } from "../toColour";
 
 const startTransitionToColour = async (args: any) => {
   return true;
@@ -15,22 +16,9 @@ export const goToColour = async ({
   colour: string;
   timeMinutes: number;
 }) => {
-  // Cancel any existing actions
-  // Start a new action
+  toColour({ hue, hueIndexes, targetColour: hue.colors.hexToCIE1931(colour) });
 
-  const results = await Promise.all(
-    hueIndexes.map(index => {
-      return startTransitionToColour({
-        index,
-        colour,
-        timeMinutes,
-        hue
-      });
-    })
-  );
   return {
-    // Only return `true` if all operations were successful
-    success: results.find(result => !result) || true,
-    results
+    success: true
   };
 };

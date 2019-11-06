@@ -93,11 +93,17 @@ const nextStepBetweenColours = ({
 
 let lastColour: XYPoint[] = [];
 
-const nextStep = async (
-  targetIndexes: number[],
-  remainingSteps: number,
+const nextStep = async ({
+  targetIndexes,
+  targetColour,
+  remainingSteps,
   hue
-) => {
+}: {
+  targetIndexes: number[];
+  targetColour: XYPoint;
+  remainingSteps: number;
+  hue: Hue;
+}) => {
   await eachSeries(targetIndexes, async index => {
     // await hue.flash(index);
     const currentColour = !!lastColour[index - 1]
@@ -105,18 +111,16 @@ const nextStep = async (
       : await getLampColour(index);
     const newColour = nextStepBetweenColours({
       currentColour,
-      targetColour: TARGET_COLOUR,
+      targetColour,
       remainingSteps
     });
     lastColour[index - 1] = newColour;
 
     if (DEBUG)
       console.log(
-        "Colour transitions #oTYDwI",
-        index,
+        `Colour transitions #oTYDwI index: ${index}; remaining steps: ${remainingSteps}; current; next;`,
         currentColour,
-        newColour,
-        remainingSteps
+        newColour
       );
 
     // await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
@@ -130,17 +134,22 @@ const nextStep = async (
   );
 };
 
-const start = async () => {
-  const hue = await getHue();
-
-  const targetIndexes = await getLightIndexesByNamees(TARGET_LIGHTS);
-  if (DEBUG) console.log("targetIndex", targetIndexes);
+export const toColour = async ({
+  hue,
+  hueIndexes: targetIndexes,
+  targetColour
+}: {
+  hue: Hue;
+  hueIndexes: number[];
+  targetColour: XYPoint;
+}) => {
+  if (DEBUG) console.log("targetIndex #TUAzvL", targetIndexes);
 
   timesSeries(
     TOTAL_STEPS,
     async step => {
       const remainingSteps = TOTAL_STEPS - step;
-      await nextStep(targetIndexes, remainingSteps, hue);
+      await nextStep({ targetIndexes, remainingSteps, hue, targetColour });
       return new Promise(resolve => {
         setTimeout(resolve, STEP_INTERVAL);
       });
@@ -154,24 +163,3 @@ const start = async () => {
     }
   );
 };
-
-const run = async () => {
-  try {
-    await start();
-  } catch (err) {
-    console.error("Error #HuomZL", err);
-    process.exit();
-  }
-};
-
-export const toColour = ({
-  hue,
-  targetColour,
-  durationMs
-}: {
-  hue: Hue;
-  targetColour: string;
-  durationMs: number;
-}) => {};
-
-run();

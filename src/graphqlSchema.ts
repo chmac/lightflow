@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import { Hue, Lamp, States } from "hue-hacking-node";
+import { Hue, Lamp, States, XYPoint } from "hue-hacking-node";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
@@ -15,6 +15,7 @@ type LightState {
   hue: Int
   saturation: Int
   xy: [Float]
+  xyAsHex: String
   "The Hue field \`ct\`, lamp colour temperature"
   colourTemperature: Int
 }
@@ -28,6 +29,7 @@ type Light {
 
 type Query {
   lights(name: String): [Light]
+  xyToRGB(x: Float!, y: Float!): String!
 }
 
 input GoToColourInput {
@@ -88,17 +90,21 @@ type GoToColourInputArgs = {
 
 const getProp = name => val => val[name];
 
-const makeResolvers = ({ hue }) => {
+const makeResolvers = ({ hue }: { hue: Hue }) => {
   return {
     LightState: {
       brightness: getProp("bri"),
       colourTemperature: getProp("ct"),
-      saturation: getProp("sat")
+      saturation: getProp("sat"),
+      xyAsHex: state => hue.colors.CIE1931ToHex(new XYPoint(...state.xy))
     },
     Light: {
       hueIndex: (light: Lamp) => light.lampIndex
     },
     Query: {
+      xyToRGB: (root, { x, y }: { x: number; y: number }) => {
+        return hue.colors.CIE1931ToHex(new XYPoint(x, y));
+      },
       lights: async (root, args: LightsArgs) => {
         const { name } = args;
         const lights = await getLights();
