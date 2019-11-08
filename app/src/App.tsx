@@ -1,13 +1,17 @@
 import React from "react";
-import "./App.css";
+import { Provider } from "react-redux";
+
+import { store } from "./store";
 
 import { Lights } from "./scenes/Lights";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Lights />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <Lights />
+      </div>
+    </Provider>
   );
 };
 
