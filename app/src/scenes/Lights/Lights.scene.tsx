@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { AppState } from "../../store";
-import { fetchLights, Light, check } from "./Lights.state";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect } from "react-redux";
+
+import { AppState } from "../../store";
+import { fetchLights, Light, check } from "./Lights.state";
+import { colours } from "./colours";
 
 const Lights = (props: Props) => {
   const { lights, fetchLights, check } = props;
@@ -41,8 +43,36 @@ const Lights = (props: Props) => {
 
   return (
     <div>
-      <h1>Lights</h1>
+      <h2>Lights</h2>
       {lights.length > 0 ? lights.map(LightSingle) : null}
+      <h2>Timing</h2>
+      <select>
+        <option value="1">1 minute</option>
+        <option value="10">10 minutes</option>
+        <option value="20">20 minutes</option>
+        <option value="30">30 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
+
+      <h2>Brightness</h2>
+      <select>
+        {Array.from({ length: 255 }).map((v, index) => (
+          <option key={index} value={index}>
+            {index}
+          </option>
+        ))}
+      </select>
+      <button>Go</button>
+
+      <h2>Colour</h2>
+      <select>
+        {colours.map(colour => (
+          <option key={colour} value={colour}>
+            {colour}
+          </option>
+        ))}
+      </select>
+      <button>Go</button>
     </div>
   );
 };
