@@ -25,6 +25,7 @@ const Lights = (props: Props) => {
           type="checkbox"
           id={`lightToggle${hueIndex}`}
           checked={light.checked}
+          readOnly={true}
         ></input>
         <label
           htmlFor={`lightToggle${hueIndex}`}
