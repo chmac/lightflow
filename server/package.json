@@ -16,7 +16,7 @@
     "@types/nedb": "^1.8.9",
     "async": "^3.1.0",
     "graphql-yoga": "^1.18.3",
-    "hue-hacking-node": "^1.4.0",
+    "hue-hacking-node": "file:../hue-hacking-npm",
     "lodash": "^4.17.15",
     "nedb": "^1.8.0"
   },
