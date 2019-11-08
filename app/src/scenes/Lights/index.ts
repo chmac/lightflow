@@ -1,1 +1,1 @@
-export * from "./Lights.scene";
+export { default } from "./Lights.scene";

@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 
 import { store } from "./store";
 
-import { Lights } from "./scenes/Lights";
+import Lights from "./scenes/Lights";
 
 const App: React.FC = () => {
   return (
