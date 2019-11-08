@@ -1,25 +1,42 @@
 import React, { useEffect } from "react";
 import { AppState } from "../../store";
-import { fetchLights, Light } from "./Lights.state";
+import { fetchLights, Light, check } from "./Lights.state";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect } from "react-redux";
 
-const LightSingle = (light: Light) => {
-  const onText = light.state.on ? "ON" : "OFF";
-  return (
-    <div key={light.hueIndex}>
-      {light.name}: {onText}
-    </div>
-  );
-};
-
 const Lights = (props: Props) => {
-  const { lights, fetchLights } = props;
+  const { lights, fetchLights, check } = props;
 
   useEffect(() => {
     fetchLights();
   }, [fetchLights]);
+
+  const LightSingle = (light: Light & { checked: boolean }) => {
+    const { data } = light;
+    const { hueIndex, name, state } = data;
+    const { on } = state;
+
+    const onText = on ? "ON" : "OFF";
+
+    return (
+      <div key={hueIndex}>
+        <input
+          type="checkbox"
+          id={`lightToggle${hueIndex}`}
+          checked={light.checked}
+        ></input>
+        <label
+          htmlFor={`lightToggle${hueIndex}`}
+          onClick={() => {
+            check(hueIndex);
+          }}
+        >
+          {name}: {onText}
+        </label>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -39,7 +56,8 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, {}, AnyAction>
 ) => {
   return {
-    fetchLights: () => dispatch(fetchLights())
+    fetchLights: () => dispatch(fetchLights()),
+    check: (hueIndex: number) => dispatch(check(hueIndex))
   };
 };
 

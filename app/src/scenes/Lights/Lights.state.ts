@@ -2,6 +2,7 @@ import { Action, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "../../store";
 import { requestGraphql } from "../../requestGraphql";
+import { statement } from "@babel/template";
 
 const FETCH = "app/Lights/FETCH";
 const FETCH_SUCCESS = "app/Lights/FETCH_SUCCESS";
@@ -12,26 +13,10 @@ export interface FetchAction extends Action<typeof FETCH> {
 export interface FetchSuccessAction extends Action<typeof FETCH_SUCCESS> {
   payload: {
     data: {
-      lights: Light[];
+      lights: LightData[];
     };
   };
 }
-
-const SET_SHOW_SAVE_MESSAGE = "cryptparty/ManageEvent/SET_SHOW_SAVE_MESSAGE";
-export interface SetShowSaveMessageAction
-  extends Action<typeof SET_SHOW_SAVE_MESSAGE> {
-  payload: {
-    showSaveMessage: boolean;
-  };
-}
-export const setShowSaveMessage = (
-  showSaveMessage: boolean
-): SetShowSaveMessageAction => ({
-  type: SET_SHOW_SAVE_MESSAGE,
-  payload: {
-    showSaveMessage
-  }
-});
 
 export const fetchLights = (): ThunkAction<
   void,
@@ -71,15 +56,36 @@ export const fetchLights = (): ThunkAction<
   });
 };
 
-export type Actions = FetchAction | FetchSuccessAction;
+const CHECK = "app/Lights/CHECK";
+export interface CheckAction extends Action<typeof CHECK> {
+  payload: {
+    hueIndex: number;
+  };
+}
 
-export type Light = {
+export const check = (hueIndex: number): CheckAction => {
+  return {
+    type: CHECK,
+    payload: {
+      hueIndex
+    }
+  };
+};
+
+export type Actions = FetchAction | FetchSuccessAction | CheckAction;
+
+type LightData = {
   hueIndex: number;
   name: string;
   state: {
     on: boolean;
     colormode: string;
   };
+};
+
+export type Light = {
+  data: LightData;
+  checked: boolean;
 };
 
 type LightsState = {
@@ -93,7 +99,24 @@ const empty: LightsState = {
 export const reducer = (state: LightsState = empty, action: Actions) => {
   switch (action.type) {
     case FETCH_SUCCESS: {
-      return { ...state, lights: action.payload.data.lights };
+      return {
+        ...state,
+        lights: action.payload.data.lights.map(light => ({
+          data: light,
+          checked: false
+        }))
+      };
+    }
+    case CHECK: {
+      return {
+        ...state,
+        lights: state.lights.map(light => {
+          if (light.data.hueIndex === action.payload.hueIndex) {
+            return { ...light, checked: !light.checked };
+          }
+          return light;
+        })
+      };
     }
   }
 
