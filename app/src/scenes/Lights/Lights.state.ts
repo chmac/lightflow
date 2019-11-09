@@ -5,6 +5,7 @@ import { requestGraphql } from "../../requestGraphql";
 import { statement } from "@babel/template";
 import { GetLights } from "./Lights.queries";
 import { GoToBrightness } from "./Lights.mutations";
+import { number } from "prop-types";
 
 const FETCH = "app/Lights/FETCH";
 const FETCH_SUCCESS = "app/Lights/FETCH_SUCCESS";
@@ -98,11 +99,25 @@ export const setTimeMinutes = (timeMinutes: number) => ({
   }
 });
 
+const SET_BRIGHTNESS = "app/Lights/SET_BRIGHTNESS";
+export interface SetBrightnessAction extends Action<typeof SET_BRIGHTNESS> {
+  payload: {
+    brightness: number;
+  };
+}
+export const setBrightness = (brightness: number) => ({
+  type: SET_BRIGHTNESS,
+  payload: {
+    brightness
+  }
+});
+
 export type Actions =
   | FetchAction
   | FetchSuccessAction
   | CheckAction
-  | SetTimeMinutesAction;
+  | SetTimeMinutesAction
+  | SetBrightnessAction;
 
 export const getHueIndexes = (state: AppState) => {
   return state.Lights.lights.reduce<number[]>((hueIndexes, light) => {
@@ -170,6 +185,12 @@ export const reducer = (
       return {
         ...state,
         timeMinutes: action.payload.timeMinutes
+      };
+    }
+    case SET_BRIGHTNESS: {
+      return {
+        ...state,
+        brightness: action.payload.brightness
       };
     }
   }

@@ -4,7 +4,13 @@ import { AnyAction } from "redux";
 import { connect } from "react-redux";
 
 import { AppState } from "../../store";
-import { fetchLights, Light, check, setTimeMinutes } from "./Lights.state";
+import {
+  fetchLights,
+  Light,
+  check,
+  setTimeMinutes,
+  setBrightness
+} from "./Lights.state";
 import { colours } from "./colours";
 
 const Lights = (props: Props) => {
@@ -53,7 +59,7 @@ const Lights = (props: Props) => {
         value={props.timeMinutes}
       >
         {[1, 10, 20, 30, 60].map(minutes => (
-          <option key={minutes} value={minutes.toString()}>
+          <option key={minutes} value={minutes}>
             {minutes} minute{minutes > 1 ? "s" : ""}
           </option>
         ))}
@@ -61,7 +67,12 @@ const Lights = (props: Props) => {
 
       <h2>Brightness</h2>
       <p>
-        <select>
+        <select
+          value={props.brightness}
+          onChange={e => {
+            props.setBrightness(e.target.value);
+          }}
+        >
           {Array.from({ length: 255 }).map((v, index) => (
             <option key={index} value={index}>
               {index}
@@ -106,7 +117,9 @@ const mapDispatchToProps = (
     fetchLights: () => dispatch(fetchLights()),
     check: (hueIndex: number) => dispatch(check(hueIndex)),
     setTimeMinutes: (minutes: string) =>
-      dispatch(setTimeMinutes(parseInt(minutes)))
+      dispatch(setTimeMinutes(parseInt(minutes))),
+    setBrightness: (brightness: string) =>
+      dispatch(setBrightness(parseInt(brightness)))
   };
 };
 
