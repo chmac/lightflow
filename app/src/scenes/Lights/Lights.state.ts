@@ -85,7 +85,24 @@ export const toBrightness = (): ThunkAction<
   });
 };
 
-export type Actions = FetchAction | FetchSuccessAction | CheckAction;
+const SET_TIME_MINUTES = "app/Lights/SET_TIME_MINUTES";
+export interface SetTimeMinutesAction extends Action<typeof SET_TIME_MINUTES> {
+  payload: {
+    timeMinutes: number;
+  };
+}
+export const setTimeMinutes = (timeMinutes: number) => ({
+  type: SET_TIME_MINUTES,
+  payload: {
+    timeMinutes
+  }
+});
+
+export type Actions =
+  | FetchAction
+  | FetchSuccessAction
+  | CheckAction
+  | SetTimeMinutesAction;
 
 export const getHueIndexes = (state: AppState) => {
   return state.Lights.lights.reduce<number[]>((hueIndexes, light) => {
@@ -147,6 +164,12 @@ export const reducer = (
           }
           return light;
         })
+      };
+    }
+    case SET_TIME_MINUTES: {
+      return {
+        ...state,
+        timeMinutes: action.payload.timeMinutes
       };
     }
   }
