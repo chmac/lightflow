@@ -3,6 +3,8 @@ import { ThunkAction } from "redux-thunk";
 import { AppState } from "../../store";
 import { requestGraphql } from "../../requestGraphql";
 import { statement } from "@babel/template";
+import { GetLights } from "./Lights.queries";
+import { GoToBrightness } from "./Lights.mutations";
 
 const FETCH = "app/Lights/FETCH";
 const FETCH_SUCCESS = "app/Lights/FETCH_SUCCESS";
@@ -28,25 +30,7 @@ export const fetchLights = (): ThunkAction<
     type: FETCH
   });
 
-  const data = await requestGraphql(`
-    query Lights {
-      lights {
-        hueIndex
-        name
-        state {
-          on
-          reachable
-          colormode
-          brightness
-          hue
-          saturation
-          xy
-          xyAsHex
-          colourTemperature
-        }
-      }
-    }
-  `);
+  const data = await requestGraphql(GetLights);
 
   dispatch({
     type: FETCH_SUCCESS,
@@ -72,7 +56,45 @@ export const check = (hueIndex: number): CheckAction => {
   };
 };
 
+const TO_BRIGHTNESS = "app/Lights/TO_BRIGHTNESS";
+export interface ToBrightnessAction extends Action<typeof TO_BRIGHTNESS> {
+  payload: {};
+}
+
+export const toBrightness = (): ThunkAction<
+  void,
+  AppState,
+  {},
+  AnyAction
+> => async (dispatch, getState) => {
+  const state = getState();
+  const { brightness, timeMinutes } = state.Lights;
+
+  const hueIndexes = getHueIndexes(state);
+
+  await requestGraphql(GoToBrightness, {
+    input: {
+      hueIndexes,
+      brightness,
+      timeMinutes
+    }
+  });
+  dispatch({
+    type: TO_BRIGHTNESS,
+    payload: {}
+  });
+};
+
 export type Actions = FetchAction | FetchSuccessAction | CheckAction;
+
+export const getHueIndexes = (state: AppState) => {
+  return state.Lights.lights.reduce<number[]>((hueIndexes, light) => {
+    if (light.checked) {
+      return hueIndexes.concat(light.data.hueIndex);
+    }
+    return hueIndexes;
+  }, []);
+};
 
 type LightData = {
   hueIndex: number;
@@ -90,13 +112,22 @@ export type Light = {
 
 type LightsState = {
   lights: Light[];
+  brightness: number;
+  colour: string;
+  timeMinutes: number;
 };
 
 const empty: LightsState = {
-  lights: []
+  lights: [],
+  brightness: 254,
+  colour: "red",
+  timeMinutes: 30
 };
 
-export const reducer = (state: LightsState = empty, action: Actions) => {
+export const reducer = (
+  state: LightsState = empty,
+  action: Actions
+): LightsState => {
   switch (action.type) {
     case FETCH_SUCCESS: {
       return {

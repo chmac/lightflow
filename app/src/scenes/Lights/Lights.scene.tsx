@@ -55,24 +55,32 @@ const Lights = (props: Props) => {
       </select>
 
       <h2>Brightness</h2>
-      <select>
-        {Array.from({ length: 255 }).map((v, index) => (
-          <option key={index} value={index}>
-            {index}
-          </option>
-        ))}
-      </select>
-      <button>Go</button>
+      <p>
+        <select>
+          {Array.from({ length: 255 }).map((v, index) => (
+            <option key={index} value={index}>
+              {index}
+            </option>
+          ))}
+        </select>
+      </p>
+      <p>
+        <button onClick={() => {}}>Go</button>
+      </p>
 
       <h2>Colour</h2>
-      <select>
-        {colours.map(colour => (
-          <option key={colour} value={colour}>
-            {colour}
-          </option>
-        ))}
-      </select>
-      <button>Go</button>
+      <p>
+        <select>
+          {colours.map(colour => (
+            <option key={colour} value={colour}>
+              {colour}
+            </option>
+          ))}
+        </select>
+      </p>
+      <p>
+        <button onClick={() => {}}>Go</button>
+      </p>
     </div>
   );
 };
