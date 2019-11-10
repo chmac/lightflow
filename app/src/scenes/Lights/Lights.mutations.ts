@@ -1,5 +1,7 @@
 export const GoToBrightness = `
-mutation GoToBrightness($input: ToBrightnessInput) {
-  success
+mutation GoToBrightness($input: GoToBrightnessInput!) {
+  goToBrightness(input: $input) {
+    success
+  }
 }
 `;

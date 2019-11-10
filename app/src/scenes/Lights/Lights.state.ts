@@ -57,12 +57,12 @@ export const check = (hueIndex: number): CheckAction => {
   };
 };
 
-const TO_BRIGHTNESS = "app/Lights/TO_BRIGHTNESS";
-export interface ToBrightnessAction extends Action<typeof TO_BRIGHTNESS> {
+const GO_TO_BRIGHTNESS = "app/Lights/GO_TO_BRIGHTNESS";
+export interface ToBrightnessAction extends Action<typeof GO_TO_BRIGHTNESS> {
   payload: {};
 }
 
-export const toBrightness = (): ThunkAction<
+export const goToBrightness = (): ThunkAction<
   void,
   AppState,
   {},
@@ -81,7 +81,7 @@ export const toBrightness = (): ThunkAction<
     }
   });
   dispatch({
-    type: TO_BRIGHTNESS,
+    type: GO_TO_BRIGHTNESS,
     payload: {}
   });
 };

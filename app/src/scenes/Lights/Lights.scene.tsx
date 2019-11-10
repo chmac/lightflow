@@ -9,7 +9,8 @@ import {
   Light,
   check,
   setTimeMinutes,
-  setBrightness
+  setBrightness,
+  goToBrightness
 } from "./Lights.state";
 import { colours } from "./colours";
 
@@ -81,7 +82,13 @@ const Lights = (props: Props) => {
         </select>
       </p>
       <p>
-        <button onClick={() => {}}>Go</button>
+        <button
+          onClick={() => {
+            props.goToBrightness();
+          }}
+        >
+          Go
+        </button>
       </p>
 
       <h2>Colour</h2>
@@ -119,7 +126,8 @@ const mapDispatchToProps = (
     setTimeMinutes: (minutes: string) =>
       dispatch(setTimeMinutes(parseInt(minutes))),
     setBrightness: (brightness: string) =>
-      dispatch(setBrightness(parseInt(brightness)))
+      dispatch(setBrightness(parseInt(brightness))),
+    goToBrightness: () => dispatch(goToBrightness())
   };
 };
 
