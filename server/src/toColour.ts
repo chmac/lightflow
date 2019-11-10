@@ -3,57 +3,9 @@ import { eachSeries, timesSeries } from "async";
 
 import { STEP_INTERVAL_MS } from "./config/private";
 
-import { getLights } from "./utils";
+import { getLights, findLightByHueIndex } from "./utils";
 
 const DEBUG = true;
-
-const getLightIndexesByNamees = async (names: string[]): Promise<number[]> => {
-  const lights = await getLights();
-
-  const indexes = names.reduce((final: number[], name): number[] => {
-    const index = lights.findIndex(light => {
-      return light.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
-    });
-    if (index !== -1) {
-      // The array is zero indexed but hue is 1 indexed, so add 1 here
-      return final.concat(index + 1);
-    }
-    return final;
-  }, []);
-
-  if (indexes.length === 0) {
-    throw new Error("Failed to find lights #ckxRtG");
-  }
-
-  if (DEBUG) {
-    console.log("Got light indexes #XljJyD");
-    indexes.forEach(index => {
-      console.log("Light state #qQ5v49", lights[index - 1].state);
-    });
-  }
-
-  return indexes;
-};
-
-const getLampByHueIndex = async (hueIndex: number): Promise<Lamp> => {
-  const lamps = await getLights();
-  const lamp = lamps[hueIndex - 1];
-  if (!lamp) {
-    throw new Error(`Could not find lamp #akrrNk, hueIndex: ${hueIndex}`);
-  }
-  return lamp;
-};
-
-const getLampColour = async (hueIndex: number) => {
-  const lamp = await getLampByHueIndex(hueIndex);
-
-  if (DEBUG) console.log("Lamp colour #1cHx7a", lamp.state.xy, lamp.state.bri);
-
-  if (!!lamp.state.xy && !!lamp.state.bri) {
-    return new XYPoint(lamp.state.xy[0], lamp.state.xy[1]);
-  }
-  throw new Error("Lamp has no colour #FncbSE");
-};
 
 const nextStepBetweenColours = ({
   currentColour,
@@ -73,51 +25,6 @@ const nextStepBetweenColours = ({
     return newColour;
   });
   return new XYPoint(...xy);
-};
-
-let lastColour: XYPoint[] = [];
-
-const nextStep = async ({
-  targetIndexes,
-  targetColour,
-  remainingSteps,
-  totalSteps,
-  hue
-}: {
-  targetIndexes: number[];
-  targetColour: XYPoint;
-  remainingSteps: number;
-  totalSteps: number;
-  hue: Hue;
-}) => {
-  await eachSeries(targetIndexes, async index => {
-    // await hue.flash(index);
-    const currentColour = !!lastColour[index - 1]
-      ? lastColour[index - 1]
-      : await getLampColour(index);
-    const newColour = nextStepBetweenColours({
-      currentColour,
-      targetColour,
-      remainingSteps
-    });
-    lastColour[index - 1] = newColour;
-
-    if (DEBUG)
-      console.log(
-        `Colour transitions #oTYDwI index: ${index}; remaining steps: ${remainingSteps}; current; next;`,
-        currentColour,
-        newColour
-      );
-
-    // await hue.setColor(index, hue.colors.CIE1931ToHex(newColour));
-    await hue.setColor(index, newColour);
-  });
-
-  console.log(
-    `Step completed #Hm1wK0, remaining steps: ${remainingSteps} / ${totalSteps} (${(remainingSteps *
-      STEP_INTERVAL_MS) /
-      1e3}s remaining)`
-  );
 };
 
 export const toColour = async ({
@@ -140,13 +47,27 @@ export const toColour = async ({
     totalSteps,
     async step => {
       const remainingSteps = totalSteps - step;
-      await nextStep({
-        targetIndexes,
-        remainingSteps,
-        totalSteps,
-        hue,
-        targetColour
+      const lights = await getLights();
+
+      await eachSeries(targetIndexes, async hueIndex => {
+        const light = findLightByHueIndex(lights, hueIndex);
+
+        const currentColour = new XYPoint(...light.state.xy);
+        const newColour = nextStepBetweenColours({
+          currentColour,
+          targetColour,
+          remainingSteps
+        });
+
+        await hue.setColor(hueIndex, newColour);
+        if (DEBUG)
+          console.log(
+            `Just set colour #fMeD0L. Light hue index ${hueIndex}. Step ${step} / ${totalSteps}. Current; Next`,
+            currentColour,
+            newColour
+          );
       });
+
       return new Promise(resolve => {
         setTimeout(resolve, STEP_INTERVAL_MS);
       });
@@ -155,7 +76,7 @@ export const toColour = async ({
       if (error) {
         throw error;
       } else {
-        console.log("timesSeries complete #7CtSVA");
+        if (DEBUG) console.log("Go to colour complete #7CtSVA");
       }
     }
   );
