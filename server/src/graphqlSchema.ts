@@ -97,6 +97,12 @@ type GoToBrightnessInputArgs = {
 
 const getProp = name => val => val[name];
 
+const assertHueIndexes = (hueIndexes: number[]) => {
+  if (hueIndexes.length === 0) {
+    throw new Error("You must provide at least 1 hueIndex value #I4Qlbd.");
+  }
+};
+
 const makeResolvers = ({ hue }: { hue: Hue }) => {
   return {
     LightState: {
@@ -127,6 +133,7 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
     Mutation: {
       goToColour: async (root, args: { input: GoToColourInputArgs }) => {
         const { hueIndexes, colour, timeMinutes } = args.input;
+        assertHueIndexes(hueIndexes);
         return goToColour({ hue, hueIndexes, colour, timeMinutes });
       },
       goToBrightness: async (
@@ -134,6 +141,7 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
         args: { input: GoToBrightnessInputArgs }
       ) => {
         const { hueIndexes, brightness, timeMinutes } = args.input;
+        assertHueIndexes(hueIndexes);
         return goToBrightness({ hue, hueIndexes, brightness, timeMinutes });
       }
     }
