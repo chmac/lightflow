@@ -103,7 +103,8 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
       brightness: getProp("bri"),
       colourTemperature: getProp("ct"),
       saturation: getProp("sat"),
-      xyAsHex: state => hue.colors.CIE1931ToHex(new XYPoint(...state.xy))
+      xyAsHex: state =>
+        !!state.xy ? hue.colors.CIE1931ToHex(new XYPoint(...state.xy)) : null
     },
     Light: {
       hueIndex: (light: Lamp) => light.lampIndex
