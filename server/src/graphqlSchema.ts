@@ -1,5 +1,7 @@
 import { GraphQLServer } from "graphql-yoga";
 import { Hue, Lamp, XYPoint } from "hue-hacking-node";
+import express from "express";
+import path from "path";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
@@ -152,6 +154,12 @@ export const startServer = ({ hue }: { hue: Hue }) => {
   const resolvers = makeResolvers({ hue });
 
   const server = new GraphQLServer({ typeDefs, resolvers });
+
+  server.express.use(express.static(path.join(__dirname, "../../app/build")));
+
+  server.express.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "../../app/build", "index.html"));
+  });
 
   server.start({ endpoint: "/graphql" }, () => {
     console.log("Server started on localhost:4000 #AUJVSy");
