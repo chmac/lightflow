@@ -71,6 +71,9 @@ const Lights = (props: Props) => {
           setTimeMinutes(e.target.value);
         }}
         value={timeMinutes}
+        style={{
+          fontSize: "0.8em"
+        }}
       >
         {[1, 10, 20, 30, 60].map(minutes => (
           <option key={minutes} value={minutes}>
@@ -85,6 +88,9 @@ const Lights = (props: Props) => {
           value={brightness}
           onChange={e => {
             setBrightness(e.target.value);
+          }}
+          style={{
+            fontSize: "0.8em"
           }}
         >
           {Array.from({ length: 255 }).map((v, index) => (
@@ -101,6 +107,9 @@ const Lights = (props: Props) => {
               goToBrightness();
             }
           }}
+          style={{
+            fontSize: "0.8em"
+          }}
         >
           Go
         </button>
@@ -112,6 +121,9 @@ const Lights = (props: Props) => {
           value={colour}
           onChange={e => {
             setColour(e.target.value);
+          }}
+          style={{
+            fontSize: "0.8em"
           }}
         >
           {colours.map(colour => (
@@ -127,6 +139,9 @@ const Lights = (props: Props) => {
             if (window.confirm("Are you sure?")) {
               goToColour();
             }
+          }}
+          style={{
+            fontSize: "0.8em"
           }}
         >
           Go
