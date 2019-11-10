@@ -29,14 +29,18 @@ export const fetchLights = (): ThunkAction<
     type: FETCH
   });
 
-  const data = await requestGraphql(GetLights);
+  try {
+    const data = await requestGraphql(GetLights);
 
-  dispatch({
-    type: FETCH_SUCCESS,
-    payload: {
-      data
-    }
-  });
+    dispatch({
+      type: FETCH_SUCCESS,
+      payload: {
+        data
+      }
+    });
+  } catch (e) {
+    alert(`#12X9Mx Fetch failed with error. ${e.message}`);
+  }
 };
 
 const CHECK = "app/Lights/CHECK";
@@ -67,17 +71,23 @@ export const goToBrightness = (): ThunkAction<
 
   const hueIndexes = getHueIndexes(state);
 
-  await requestGraphql(GoToBrightness, {
-    input: {
-      hueIndexes,
-      brightness,
-      timeMinutes
-    }
-  });
-  dispatch({
-    type: GO_TO_BRIGHTNESS,
-    payload: {}
-  });
+  try {
+    await requestGraphql(GoToBrightness, {
+      input: {
+        hueIndexes,
+        brightness,
+        timeMinutes
+      }
+    });
+
+    dispatch({
+      type: GO_TO_BRIGHTNESS,
+      payload: {}
+    });
+  } catch (e) {
+    debugger;
+    alert(`#oek0su GoToBrigthness failed with error: ${e.message}`);
+  }
 };
 
 const GO_TO_COLOUR = "app/Lights/GO_TO_COLOUR";
@@ -96,17 +106,22 @@ export const goToColour = (): ThunkAction<
 
   const hueIndexes = getHueIndexes(state);
 
-  await requestGraphql(GoToColour, {
-    input: {
-      hueIndexes,
-      colour,
-      timeMinutes
-    }
-  });
-  dispatch({
-    type: GO_TO_COLOUR,
-    payload: {}
-  });
+  try {
+    await requestGraphql(GoToColour, {
+      input: {
+        hueIndexes,
+        colour,
+        timeMinutes
+      }
+    });
+
+    dispatch({
+      type: GO_TO_COLOUR,
+      payload: {}
+    });
+  } catch (e) {
+    alert(`#bG4twO GoToColour failed with error: ${e.message}`);
+  }
 };
 
 const SET_TIME_MINUTES = "app/Lights/SET_TIME_MINUTES";
