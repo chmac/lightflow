@@ -97,7 +97,9 @@ const Lights = (props: Props) => {
       <p>
         <button
           onClick={() => {
-            goToBrightness();
+            if (window.confirm("Are you sure?")) {
+              goToBrightness();
+            }
           }}
         >
           Go
@@ -122,7 +124,9 @@ const Lights = (props: Props) => {
       <p>
         <button
           onClick={() => {
-            goToColour();
+            if (window.confirm("Are you sure?")) {
+              goToColour();
+            }
           }}
         >
           Go
