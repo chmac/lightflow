@@ -8,7 +8,14 @@ import Lights from "./scenes/Lights";
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <div className="App">
+      <div
+        className="App"
+        style={{
+          maxWidth: "300px",
+          margin: "auto",
+          fontSize: "1.4em"
+        }}
+      >
         <Lights />
       </div>
     </Provider>
