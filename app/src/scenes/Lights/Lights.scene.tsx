@@ -43,22 +43,21 @@ const Lights = (props: Props) => {
     const onText = on ? "ON" : "OFF";
 
     return (
-      <div key={hueIndex}>
+      <p
+        key={hueIndex}
+        onClick={() => {
+          check(hueIndex);
+        }}
+        style={light.checked ? { backgroundColor: "lightgreen" } : {}}
+      >
         <input
           type="checkbox"
           id={`lightToggle${hueIndex}`}
           checked={light.checked}
           readOnly={true}
-        ></input>
-        <label
-          htmlFor={`lightToggle${hueIndex}`}
-          onClick={() => {
-            check(hueIndex);
-          }}
-        >
-          {name}: {onText}
-        </label>
-      </div>
+        ></input>{" "}
+        {name}: {onText}
+      </p>
     );
   };
 
