@@ -2,7 +2,7 @@ import { eachSeries, timesSeries } from "async";
 import { Hue, HueColors } from "hue-hacking-node";
 
 import { STEP_INTERVAL } from "../constants";
-import { getLights } from "../utils";
+import { getLights, findLightByHueIndex } from "../utils";
 import { STEP_INTERVAL_MS } from "../config/private";
 
 const DEBUG = true;
@@ -36,17 +36,16 @@ const startRunToBrightness = async ({
 }) => {
   const totalSteps = Math.ceil(timeMs / STEP_INTERVAL);
 
-  const lights = await hue.getLamps();
-  let lastBrightness = {};
-
   timesSeries(
     totalSteps,
     async step => {
       const remainingSteps = totalSteps - step;
 
+      const lights = await hue.getLamps();
+
       eachSeries(hueIndexes, async hueIndex => {
-        const currentBrightness =
-          lastBrightness[hueIndex] || lights[hueIndex - 1].state.bri;
+        const light = findLightByHueIndex(lights, hueIndex);
+        const currentBrightness = light.state.bri;
 
         const nextBrightness = calculateNextBrightness({
           currentBrightness,
@@ -67,8 +66,6 @@ const startRunToBrightness = async ({
             remainingSteps,
             totalSteps
           );
-
-        lastBrightness[hueIndex] = nextBrightness;
       });
 
       return new Promise(resolve => {

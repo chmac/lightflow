@@ -40,3 +40,11 @@ export const getLights = async () => {
 
   return lamps;
 };
+
+export const findLightByHueIndex = (lights: Lamp[], hueIndex: number) => {
+  const light = lights.find(({ lampIndex }) => lampIndex === hueIndex);
+  if (!light) {
+    throw new Error("Failed to find light. #srh6sh");
+  }
+  return light;
+};
