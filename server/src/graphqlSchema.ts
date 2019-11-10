@@ -153,7 +153,7 @@ export const startServer = ({ hue }: { hue: Hue }) => {
 
   const server = new GraphQLServer({ typeDefs, resolvers });
 
-  server.start(() => {
+  server.start({ endpoint: "/graphql" }, () => {
     console.log("Server started on localhost:4000 #AUJVSy");
   });
 
