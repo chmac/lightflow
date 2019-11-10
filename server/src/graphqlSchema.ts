@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import { Hue, Lamp, States, XYPoint } from "hue-hacking-node";
+import { Hue, Lamp, XYPoint } from "hue-hacking-node";
 
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
