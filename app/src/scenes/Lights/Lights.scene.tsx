@@ -10,12 +10,26 @@ import {
   check,
   setTimeMinutes,
   setBrightness,
-  goToBrightness
+  goToBrightness,
+  setColour,
+  goToColour
 } from "./Lights.state";
 import { colours } from "./colours";
 
 const Lights = (props: Props) => {
-  const { lights, fetchLights, check } = props;
+  const {
+    lights,
+    fetchLights,
+    check,
+    colour,
+    setColour,
+    goToColour,
+    timeMinutes,
+    setTimeMinutes,
+    brightness,
+    setBrightness,
+    goToBrightness
+  } = props;
 
   useEffect(() => {
     fetchLights();
@@ -55,9 +69,9 @@ const Lights = (props: Props) => {
       <h2>Timing</h2>
       <select
         onChange={e => {
-          props.setTimeMinutes(e.target.value);
+          setTimeMinutes(e.target.value);
         }}
-        value={props.timeMinutes}
+        value={timeMinutes}
       >
         {[1, 10, 20, 30, 60].map(minutes => (
           <option key={minutes} value={minutes}>
@@ -69,9 +83,9 @@ const Lights = (props: Props) => {
       <h2>Brightness</h2>
       <p>
         <select
-          value={props.brightness}
+          value={brightness}
           onChange={e => {
-            props.setBrightness(e.target.value);
+            setBrightness(e.target.value);
           }}
         >
           {Array.from({ length: 255 }).map((v, index) => (
@@ -84,7 +98,7 @@ const Lights = (props: Props) => {
       <p>
         <button
           onClick={() => {
-            props.goToBrightness();
+            goToBrightness();
           }}
         >
           Go
@@ -93,7 +107,12 @@ const Lights = (props: Props) => {
 
       <h2>Colour</h2>
       <p>
-        <select>
+        <select
+          value={colour}
+          onChange={e => {
+            setColour(e.target.value);
+          }}
+        >
           {colours.map(colour => (
             <option key={colour} value={colour}>
               {colour}
@@ -102,7 +121,13 @@ const Lights = (props: Props) => {
         </select>
       </p>
       <p>
-        <button onClick={() => {}}>Go</button>
+        <button
+          onClick={() => {
+            goToColour();
+          }}
+        >
+          Go
+        </button>
       </p>
     </div>
   );
@@ -127,7 +152,9 @@ const mapDispatchToProps = (
       dispatch(setTimeMinutes(parseInt(minutes))),
     setBrightness: (brightness: string) =>
       dispatch(setBrightness(parseInt(brightness))),
-    goToBrightness: () => dispatch(goToBrightness())
+    goToBrightness: () => dispatch(goToBrightness()),
+    setColour: (colour: string) => dispatch(setColour(colour)),
+    goToColour: () => dispatch(goToColour())
   };
 };
 

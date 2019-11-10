@@ -2,10 +2,8 @@ import { Action, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "../../store";
 import { requestGraphql } from "../../requestGraphql";
-import { statement } from "@babel/template";
 import { GetLights } from "./Lights.queries";
-import { GoToBrightness } from "./Lights.mutations";
-import { number } from "prop-types";
+import { GoToBrightness, GoToColour } from "./Lights.mutations";
 
 const FETCH = "app/Lights/FETCH";
 const FETCH_SUCCESS = "app/Lights/FETCH_SUCCESS";
@@ -58,10 +56,6 @@ export const check = (hueIndex: number): CheckAction => {
 };
 
 const GO_TO_BRIGHTNESS = "app/Lights/GO_TO_BRIGHTNESS";
-export interface ToBrightnessAction extends Action<typeof GO_TO_BRIGHTNESS> {
-  payload: {};
-}
-
 export const goToBrightness = (): ThunkAction<
   void,
   AppState,
@@ -86,13 +80,42 @@ export const goToBrightness = (): ThunkAction<
   });
 };
 
+const GO_TO_COLOUR = "app/Lights/GO_TO_COLOUR";
+export interface ToBrightnessAction extends Action<typeof GO_TO_COLOUR> {
+  payload: {};
+}
+
+export const goToColour = (): ThunkAction<
+  void,
+  AppState,
+  {},
+  AnyAction
+> => async (dispatch, getState) => {
+  const state = getState();
+  const { colour, timeMinutes } = state.Lights;
+
+  const hueIndexes = getHueIndexes(state);
+
+  await requestGraphql(GoToColour, {
+    input: {
+      hueIndexes,
+      colour,
+      timeMinutes
+    }
+  });
+  dispatch({
+    type: GO_TO_COLOUR,
+    payload: {}
+  });
+};
+
 const SET_TIME_MINUTES = "app/Lights/SET_TIME_MINUTES";
 export interface SetTimeMinutesAction extends Action<typeof SET_TIME_MINUTES> {
   payload: {
     timeMinutes: number;
   };
 }
-export const setTimeMinutes = (timeMinutes: number) => ({
+export const setTimeMinutes = (timeMinutes: number): SetTimeMinutesAction => ({
   type: SET_TIME_MINUTES,
   payload: {
     timeMinutes
@@ -105,10 +128,23 @@ export interface SetBrightnessAction extends Action<typeof SET_BRIGHTNESS> {
     brightness: number;
   };
 }
-export const setBrightness = (brightness: number) => ({
+export const setBrightness = (brightness: number): SetBrightnessAction => ({
   type: SET_BRIGHTNESS,
   payload: {
     brightness
+  }
+});
+
+const SET_COLOUR = "app/Lights/SET_COLOUR";
+export interface SetColourAction extends Action<typeof SET_COLOUR> {
+  payload: {
+    colour: string;
+  };
+}
+export const setColour = (colour: string): SetColourAction => ({
+  type: SET_COLOUR,
+  payload: {
+    colour
   }
 });
 
@@ -117,7 +153,8 @@ export type Actions =
   | FetchSuccessAction
   | CheckAction
   | SetTimeMinutesAction
-  | SetBrightnessAction;
+  | SetBrightnessAction
+  | SetColourAction;
 
 export const getHueIndexes = (state: AppState) => {
   return state.Lights.lights.reduce<number[]>((hueIndexes, light) => {
@@ -191,6 +228,12 @@ export const reducer = (
       return {
         ...state,
         brightness: action.payload.brightness
+      };
+    }
+    case SET_COLOUR: {
+      return {
+        ...state,
+        colour: action.payload.colour
       };
     }
   }

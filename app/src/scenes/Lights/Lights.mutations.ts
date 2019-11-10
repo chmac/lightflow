@@ -5,3 +5,11 @@ mutation GoToBrightness($input: GoToBrightnessInput!) {
   }
 }
 `;
+
+export const GoToColour = `
+mutation GoToBrightness($input: GoToColourInput!) {
+  goToColour(input: $input) {
+    success
+  }
+}
+`;
