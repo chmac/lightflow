@@ -4,7 +4,7 @@
 		"path": "../hue-hacking-npm"
 	},
 	{
-		"path": "app"
+		"path": "frontend"
 	},
 	{
 		"path": "server"
