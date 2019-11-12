@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": "../hue-hacking-npm"
+	},
+	{
+		"path": "app"
+	},
+	{
+		"path": "server"
+	}
+],
+  "settings": {}
+}
