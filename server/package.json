@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "author": "Callum Macdonald <git@callum-macdonald.com>",
-  "license": "GPLv3",
+  "license": "AGPL",
   "dependencies": {
     "@types/async": "^3.0.3",
     "@types/lodash": "^4.14.144",
