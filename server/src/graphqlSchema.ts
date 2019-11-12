@@ -155,10 +155,12 @@ export const startServer = ({ hue }: { hue: Hue }) => {
 
   const server = new GraphQLServer({ typeDefs, resolvers });
 
-  server.express.use(express.static(path.join(__dirname, "../../app/build")));
+  server.express.use(
+    express.static(path.join(__dirname, "../../frontend/build"))
+  );
 
   server.express.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "../../app/build", "index.html"));
+    res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
   server.start({ endpoint: "/graphql" }, () => {
