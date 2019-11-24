@@ -41,6 +41,11 @@ export const getLights = async () => {
   return lamps;
 };
 
+export const getGroups = async () => {
+  const hue = await getHue();
+  return hue.getGroups();
+};
+
 export const findLightByHueIndex = (lights: Lamp[], hueIndex: number) => {
   const light = lights.find(({ lampIndex }) => lampIndex === hueIndex);
   if (!light) {
