@@ -204,7 +204,7 @@ type LightsState = {
 const empty: LightsState = {
   lights: [],
   brightness: 254,
-  colour: "red",
+  colour: "orangered",
   timeMinutes: 30
 };
 
