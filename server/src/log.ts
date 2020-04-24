@@ -12,7 +12,7 @@ export const log = (message: string, ...args) => {
   history.push({
     message,
     params: JSON.stringify(args),
-    time: Date.now(),
+    time: Math.round(Date.now() / 1e3),
   });
 
   if (DEBUG) {
