@@ -1,0 +1,8 @@
+- Use redux server side to track state
+  - [ ] Install redux
+  - [ ] Expose current transitions in progress
+  - [ ] Add option to cancel ongoing transitions
+  - [ ] Potentially automatically overwrite transitions
+  - [ ] Show some kind of history
+- [ ] Fetch rooms and list rooms > lights
+  - Apply transitions on a light by light basis
