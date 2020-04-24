@@ -10,7 +10,7 @@ const DEBUG = true;
 const nextStepBetweenColours = ({
   currentColour,
   targetColour,
-  remainingSteps
+  remainingSteps,
 }: {
   currentColour: XYPoint;
   targetColour: XYPoint;
@@ -31,7 +31,7 @@ export const toColour = async ({
   hue,
   hueIndexes: targetIndexes,
   targetColour,
-  timeMs
+  timeMs,
 }: {
   hue: Hue;
   hueIndexes: number[];
@@ -45,18 +45,18 @@ export const toColour = async ({
 
   timesSeries(
     totalSteps,
-    async step => {
+    async (step) => {
       const remainingSteps = totalSteps - step;
       const lights = await getLights();
 
-      await eachSeries(targetIndexes, async hueIndex => {
+      await eachSeries(targetIndexes, async (hueIndex) => {
         const light = findLightByHueIndex(lights, hueIndex);
 
         const currentColour = new XYPoint(...light.state.xy);
         const newColour = nextStepBetweenColours({
           currentColour,
           targetColour,
-          remainingSteps
+          remainingSteps,
         });
 
         await hue.setColor(hueIndex, newColour);
@@ -68,11 +68,11 @@ export const toColour = async ({
           );
       });
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(resolve, STEP_INTERVAL_MS);
       });
     },
-    error => {
+    (error) => {
       if (error) {
         throw error;
       } else {

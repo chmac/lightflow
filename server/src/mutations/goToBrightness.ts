@@ -38,12 +38,12 @@ const startRunToBrightness = async ({
 
   timesSeries(
     totalSteps,
-    async step => {
+    async (step) => {
       const remainingSteps = totalSteps - step;
 
       const lights = await hue.getLamps();
 
-      eachSeries(hueIndexes, async hueIndex => {
+      eachSeries(hueIndexes, async (hueIndex) => {
         const light = findLightByHueIndex(lights, hueIndex);
         const currentBrightness = light.state.bri;
 
@@ -51,7 +51,7 @@ const startRunToBrightness = async ({
           currentBrightness,
           targetBrightness,
           remainingSteps,
-          totalSteps
+          totalSteps,
         });
 
         await hue.setBrightness(hueIndex, nextBrightness);
@@ -68,7 +68,7 @@ const startRunToBrightness = async ({
           );
       });
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(resolve, STEP_INTERVAL_MS);
       });
     },
@@ -82,7 +82,7 @@ export const goToBrightness = async ({
   hue,
   hueIndexes,
   brightness,
-  timeMinutes
+  timeMinutes,
 }: {
   hue: Hue;
   hueIndexes: number[];
@@ -93,7 +93,7 @@ export const goToBrightness = async ({
     hue,
     hueIndexes,
     targetBrightness: brightness,
-    timeMs: timeMinutes * 60 * 1e3
+    timeMs: timeMinutes * 60 * 1e3,
   });
   return true;
 };
