@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 
 import Lights from "./scenes/Lights";
+import Log from "./scenes/Log/Log.scene";
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         }}
       >
         <Lights />
+        <Log />
       </div>
     </Provider>
   );
