@@ -1,5 +1,9 @@
 ## lightflow
 
+- Smooth lighting transitions with hue lights.
+- Transition light colours and brightnesses gradually.
+- Set a target brightness or colour, transition time, and let fly...
+
 Create a config file at `server/src/config/private.ts` which looks like this:
 
 ```typescript
