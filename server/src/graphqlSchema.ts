@@ -97,7 +97,7 @@ type GoToBrightnessInputArgs = {
   timeMinutes: number;
 };
 
-const getProp = name => val => val[name];
+const getProp = (name) => (val) => val[name];
 
 const assertHueIndexes = (hueIndexes: number[]) => {
   if (hueIndexes.length === 0) {
@@ -111,11 +111,11 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
       brightness: getProp("bri"),
       colourTemperature: getProp("ct"),
       saturation: getProp("sat"),
-      xyAsHex: state =>
-        !!state.xy ? hue.colors.CIE1931ToHex(new XYPoint(...state.xy)) : null
+      xyAsHex: (state) =>
+        !!state.xy ? hue.colors.CIE1931ToHex(new XYPoint(...state.xy)) : null,
     },
     Light: {
-      hueIndex: (light: Lamp) => light.lampIndex
+      hueIndex: (light: Lamp) => light.lampIndex,
     },
     Query: {
       xyToRGB: (root, { x, y }: { x: number; y: number }) => {
@@ -126,11 +126,12 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
         const lights = await getLights();
         if (!!name) {
           return lights.filter(
-            light => light.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+            (light) =>
+              light.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
           );
         }
         return lights;
-      }
+      },
     },
     Mutation: {
       goToColour: async (root, args: { input: GoToColourInputArgs }) => {
@@ -145,8 +146,8 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
         const { hueIndexes, brightness, timeMinutes } = args.input;
         assertHueIndexes(hueIndexes);
         return goToBrightness({ hue, hueIndexes, brightness, timeMinutes });
-      }
-    }
+      },
+    },
   };
 };
 
@@ -159,7 +160,7 @@ export const startServer = ({ hue }: { hue: Hue }) => {
     express.static(path.join(__dirname, "../../frontend/build"))
   );
 
-  server.express.get("/", function(req, res) {
+  server.express.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
