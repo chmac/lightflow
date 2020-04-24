@@ -18,8 +18,8 @@ const App: React.FC = () => {
         }}
       >
         <Lights />
-        <Log />
       </div>
+      <Log />
     </Provider>
   );
 };

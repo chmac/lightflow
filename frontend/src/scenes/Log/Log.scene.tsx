@@ -12,10 +12,20 @@ const Log = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div style={{ paddingLeft: 20, paddingRight: 20 }}>
       <h1>Log</h1>
+      <button
+        onClick={() => {
+          dispatch(fetchLog());
+        }}
+        style={{
+          fontSize: "0.8em",
+        }}
+      >
+        Refresh
+      </button>
       <ul>
-        {logs.map(({ message, time, params }) => (
+        {logs.reverse().map(({ message, time, params }) => (
           <li>
             {time}: {message}: {params}
           </li>
