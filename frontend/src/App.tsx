@@ -13,7 +13,7 @@ const App: React.FC = () => {
         style={{
           maxWidth: "300px",
           margin: "auto",
-          fontSize: "1.4em"
+          fontSize: "1.4em",
         }}
       >
         <Lights />
