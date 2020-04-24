@@ -4,8 +4,7 @@ import { eachSeries, timesSeries } from "async";
 import { STEP_INTERVAL_MS } from "./config/private";
 
 import { getLights, findLightByHueIndex } from "./utils";
-
-const DEBUG = true;
+import { log } from "./log";
 
 const nextStepBetweenColours = ({
   currentColour,
@@ -38,8 +37,7 @@ export const toColour = async ({
   targetColour: XYPoint;
   timeMs: number;
 }) => {
-  if (DEBUG)
-    console.log("toColour #TUAzvL", targetIndexes, targetColour, timeMs);
+  log("toColour #TUAzvL", targetIndexes, targetColour, timeMs);
 
   const totalSteps = Math.ceil(timeMs / STEP_INTERVAL_MS);
 
@@ -60,12 +58,11 @@ export const toColour = async ({
         });
 
         await hue.setColor(hueIndex, newColour);
-        if (DEBUG)
-          console.log(
-            `Just set colour #fMeD0L. Light hue index ${hueIndex}. Step ${step} / ${totalSteps}. Current; Next`,
-            currentColour,
-            newColour
-          );
+        log(
+          `Just set colour #fMeD0L. Light hue index ${hueIndex}. Step ${step} / ${totalSteps}. Current; Next`,
+          currentColour,
+          newColour
+        );
       });
 
       return new Promise((resolve) => {
@@ -76,7 +73,7 @@ export const toColour = async ({
       if (error) {
         throw error;
       } else {
-        if (DEBUG) console.log("Go to colour complete #7CtSVA");
+        log("Go to colour complete #7CtSVA");
       }
     }
   );

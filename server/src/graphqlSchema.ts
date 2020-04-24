@@ -6,6 +6,7 @@ import path from "path";
 import { getLights } from "./utils";
 import { goToColour } from "./mutations/goToColour";
 import { goToBrightness } from "./mutations/goToBrightness";
+import { getLog } from "./log";
 
 const typeDefs = `
 type LightState {
@@ -29,10 +30,17 @@ type Light {
   state: LightState!
 }
 
+type LogMessage {
+  time: Int!
+  message: String!
+  params: String
+}
+
 
 type Query {
   lights(name: String): [Light]
   xyToRGB(x: Float!, y: Float!): String!
+  log: [LogMessage]
 }
 
 input GoToColourInput {
@@ -132,6 +140,9 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
         }
         return lights;
       },
+      log: (root) => {
+        return getLog();
+      },
     },
     Mutation: {
       goToColour: async (root, args: { input: GoToColourInputArgs }) => {
@@ -164,7 +175,7 @@ export const startServer = ({ hue }: { hue: Hue }) => {
     res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
-  server.start({ endpoint: "/graphql" }, () => {
+  server.start({ endpoint: "/graphql", playground: "/graphiql" }, () => {
     console.log("Server started on localhost:4000 #AUJVSy");
   });
 

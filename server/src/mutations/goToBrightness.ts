@@ -4,6 +4,7 @@ import { Hue, HueColors } from "hue-hacking-node";
 import { STEP_INTERVAL } from "../constants";
 import { getLights, findLightByHueIndex } from "../utils";
 import { STEP_INTERVAL_MS } from "../config/private";
+import { log } from "../log";
 
 const DEBUG = true;
 
@@ -11,7 +12,7 @@ const calculateNextBrightness = ({
   currentBrightness,
   targetBrightness,
   remainingSteps,
-  totalSteps
+  totalSteps,
 }: {
   currentBrightness: number;
   targetBrightness: number;
@@ -27,7 +28,7 @@ const startRunToBrightness = async ({
   hue,
   hueIndexes,
   targetBrightness,
-  timeMs
+  timeMs,
 }: {
   hue: Hue;
   hueIndexes: number[];
@@ -56,16 +57,15 @@ const startRunToBrightness = async ({
 
         await hue.setBrightness(hueIndex, nextBrightness);
 
-        if (DEBUG)
-          console.log(
-            "Brightness #l7TYIY",
-            hueIndex,
-            currentBrightness,
-            nextBrightness,
-            step,
-            remainingSteps,
-            totalSteps
-          );
+        log(
+          "Brightness #l7TYIY",
+          hueIndex,
+          currentBrightness,
+          nextBrightness,
+          step,
+          remainingSteps,
+          totalSteps
+        );
       });
 
       return new Promise((resolve) => {
@@ -73,7 +73,7 @@ const startRunToBrightness = async ({
       });
     },
     (err, result) => {
-      console.log("Finished run to brightness #LxS2wT");
+      log("Finished run to brightness #LxS2wT");
     }
   );
 };
