@@ -56,13 +56,17 @@ const Lights = (props: Props) => {
     const onText = on ? "ON" : "OFF";
 
     return (
-      <FormControlLabel
-        key={hueIndex}
-        control={
-          <Checkbox onChange={() => check(hueIndex)} checked={light.checked} />
-        }
-        label={`${name}: ${onText}`}
-      />
+      <Typography key={hueIndex}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              onChange={() => check(hueIndex)}
+              checked={light.checked}
+            />
+          }
+          label={`${name}: ${onText}`}
+        />
+      </Typography>
     );
   };
 
