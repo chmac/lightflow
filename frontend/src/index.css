@@ -1,0 +1,5 @@
+/* Disable the horizontal scroll */
+html,
+body {
+  overflow-x: hidden;
+}
