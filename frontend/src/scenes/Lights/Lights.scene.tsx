@@ -2,7 +2,14 @@ import React, { useEffect } from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect } from "react-redux";
-import { Typography, Paper, makeStyles, Button } from "@material-ui/core";
+import {
+  Typography,
+  Paper,
+  makeStyles,
+  Button,
+  Select,
+  MenuItem,
+} from "@material-ui/core";
 
 import { AppState } from "../../store";
 import {
@@ -70,40 +77,36 @@ const Lights = (props: Props) => {
       <Typography variant="h2">Lights</Typography>
       {lights.length > 0 ? lights.map(LightSingle) : null}
       <Typography variant="h2">Timing</Typography>
-      <select
+      <Select
+        className={classes.select}
         onChange={(e) => {
-          setTimeMinutes(e.target.value);
+          setTimeMinutes(e.target.value as string);
         }}
         value={timeMinutes}
-        style={{
-          fontSize: "0.8em",
-        }}
       >
         {[1, 10, 20, 30, 60].map((minutes) => (
-          <option key={minutes} value={minutes}>
+          <MenuItem key={minutes} value={minutes}>
             {minutes} minute{minutes > 1 ? "s" : ""}
-          </option>
+          </MenuItem>
         ))}
-      </select>
+      </Select>
 
       <Typography variant="h2">Brightness</Typography>
       <Typography>
-        <select
+        <Select
+          className={classes.select}
           value={brightness}
           onChange={(e) => {
-            setBrightness(e.target.value);
-          }}
-          style={{
-            fontSize: "0.8em",
+            setBrightness(e.target.value as string);
           }}
         >
           {/* We add 1 to the brightness levels here as this is 0 indexed */}
           {Array.from({ length: BRIGHTNESS_UI_LEVELS + 1 }).map((v, index) => (
-            <option key={index} value={index}>
+            <MenuItem key={index} value={index}>
               {Math.round((index / BRIGHTNESS_UI_LEVELS) * 100)}%
-            </option>
+            </MenuItem>
           ))}
-        </select>
+        </Select>
       </Typography>
       <Typography>
         <Button
@@ -120,21 +123,19 @@ const Lights = (props: Props) => {
 
       <Typography variant="h2">Colour</Typography>
       <Typography>
-        <select
+        <Select
+          className={classes.select}
           value={colour}
           onChange={(e) => {
-            setColour(e.target.value);
-          }}
-          style={{
-            fontSize: "0.8em",
+            setColour(e.target.value as string);
           }}
         >
           {colours.map((colour) => (
-            <option key={colour} value={colour}>
+            <MenuItem key={colour} value={colour}>
               {colour}
-            </option>
+            </MenuItem>
           ))}
-        </select>
+        </Select>
       </Typography>
       <Typography>
         <Button
@@ -188,6 +189,11 @@ const useStyles = makeStyles((theme) => {
     paper: {
       padding: theme.spacing(2),
       margin: theme.spacing(2),
+    },
+    select: {
+      width: "100%",
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     },
   };
 });
