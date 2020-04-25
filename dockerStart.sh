@@ -1,7 +1,9 @@
 #!/bin/bash
 
+./build.sh
+
 if [ "$OS" = "Darwin" ]; then
-  docker-compose up --detach --build
+  docker-compose up --detach
 else
-  sudo docker-compose up --detach --build
+  sudo docker-compose up --detach
 fi
