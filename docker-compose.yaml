@@ -1,10 +1,9 @@
 version: "3.6"
 services:
   lightflow:
-    image: "lightflow"
+    build: "."
     restart: "always"
     expose:
       - "4000"
     environment:
       - NODE_ENV=production
-    command: "yarn start"
