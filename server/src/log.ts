@@ -16,7 +16,7 @@ export const log = (message: string, ...args) => {
   });
 
   if (DEBUG) {
-    console.log(message);
+    console.log(message, ...args);
   }
 };
 
