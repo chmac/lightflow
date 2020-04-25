@@ -22,9 +22,6 @@ const Log = () => {
         onClick={() => {
           dispatch(fetchLog());
         }}
-        style={{
-          fontSize: "0.8em",
-        }}
       >
         Refresh
       </Button>

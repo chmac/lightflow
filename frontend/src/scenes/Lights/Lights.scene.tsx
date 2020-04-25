@@ -110,9 +110,6 @@ const Lights = (props: Props) => {
               goToBrightness();
             }
           }}
-          style={{
-            fontSize: "0.8em",
-          }}
         >
           Go
         </Button>
@@ -143,9 +140,6 @@ const Lights = (props: Props) => {
             if (window.confirm("Are you sure?")) {
               goToColour();
             }
-          }}
-          style={{
-            fontSize: "0.8em",
           }}
         >
           Go
