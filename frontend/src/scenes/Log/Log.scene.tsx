@@ -13,7 +13,7 @@ const timestampToHuman = (timestamp: number) => {
 const Log = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const logs = useSelector((state: AppState) => state.Log.log);
+  const logs = useSelector((state: AppState) => state.Log.log.slice(20));
 
   useEffect(() => {
     dispatch(fetchLog());
@@ -30,7 +30,7 @@ const Log = () => {
       >
         Refresh
       </Button>
-      {logs.reverse().map(({ message, time, params }, i) => (
+      {logs.map(({ message, time, params }, i) => (
         <Typography key={i} className={classes.item}>
           {timestampToHuman(time)}: {message}
           <br /> {params}
