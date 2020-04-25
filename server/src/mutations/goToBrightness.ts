@@ -6,13 +6,10 @@ import { getLights, findLightByHueIndex } from "../utils";
 import { STEP_INTERVAL_MS } from "../config/private";
 import { log } from "../log";
 
-const DEBUG = true;
-
 const calculateNextBrightness = ({
   currentBrightness,
   targetBrightness,
   remainingSteps,
-  totalSteps,
 }: {
   currentBrightness: number;
   targetBrightness: number;
