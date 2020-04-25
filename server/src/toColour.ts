@@ -35,7 +35,7 @@ export const toColour = async ({
   targetColour: XYPoint;
   timeMs: number;
 }) => {
-  log("toColour #TUAzvL", targetIndexes, targetColour, timeMs);
+  log("toColour #TUAzvL", { targetIndexes, targetColour, timeMs });
 
   // For very short durations (<60s) we choose a shorter (2s) interval
   const stepInterval = getStepInterval(timeMs);
@@ -61,8 +61,7 @@ export const toColour = async ({
         await hue.setColor(hueIndex, newColour);
         log(
           `Just set colour #fMeD0L. Light hue index ${hueIndex}. Step ${step} / ${totalSteps}. Current; Next`,
-          currentColour,
-          newColour
+          { currentColour, newColour }
         );
       });
 
