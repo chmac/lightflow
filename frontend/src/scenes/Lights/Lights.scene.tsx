@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { connect } from "react-redux";
+import { Typography, Paper, makeStyles, Button } from "@material-ui/core";
 
 import { AppState } from "../../store";
 import {
@@ -30,6 +31,7 @@ const Lights = (props: Props) => {
     setBrightness,
     goToBrightness,
   } = props;
+  const classes = useStyles();
 
   useEffect(() => {
     fetchLights();
@@ -43,7 +45,7 @@ const Lights = (props: Props) => {
     const onText = on ? "ON" : "OFF";
 
     return (
-      <p
+      <Typography
         key={hueIndex}
         onClick={() => {
           check(hueIndex);
@@ -57,15 +59,15 @@ const Lights = (props: Props) => {
           readOnly={true}
         ></input>{" "}
         {name}: {onText}
-      </p>
+      </Typography>
     );
   };
 
   return (
-    <div>
-      <h2>Lights</h2>
+    <Paper className={classes.paper}>
+      <Typography variant="h2">Lights</Typography>
       {lights.length > 0 ? lights.map(LightSingle) : null}
-      <h2>Timing</h2>
+      <Typography variant="h2">Timing</Typography>
       <select
         onChange={(e) => {
           setTimeMinutes(e.target.value);
@@ -82,8 +84,8 @@ const Lights = (props: Props) => {
         ))}
       </select>
 
-      <h2>Brightness</h2>
-      <p>
+      <Typography variant="h2">Brightness</Typography>
+      <Typography>
         <select
           value={brightness}
           onChange={(e) => {
@@ -99,9 +101,10 @@ const Lights = (props: Props) => {
             </option>
           ))}
         </select>
-      </p>
-      <p>
-        <button
+      </Typography>
+      <Typography>
+        <Button
+          variant="contained"
           onClick={() => {
             if (window.confirm("Are you sure?")) {
               goToBrightness();
@@ -112,11 +115,11 @@ const Lights = (props: Props) => {
           }}
         >
           Go
-        </button>
-      </p>
+        </Button>
+      </Typography>
 
-      <h2>Colour</h2>
-      <p>
+      <Typography variant="h2">Colour</Typography>
+      <Typography>
         <select
           value={colour}
           onChange={(e) => {
@@ -132,9 +135,10 @@ const Lights = (props: Props) => {
             </option>
           ))}
         </select>
-      </p>
-      <p>
-        <button
+      </Typography>
+      <Typography>
+        <Button
+          variant="contained"
           onClick={() => {
             if (window.confirm("Are you sure?")) {
               goToColour();
@@ -145,9 +149,9 @@ const Lights = (props: Props) => {
           }}
         >
           Go
-        </button>
-      </p>
-    </div>
+        </Button>
+      </Typography>
+    </Paper>
   );
 };
 
@@ -180,7 +184,13 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 type Props = StateProps & DispatchProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Lights);
+export default connect(mapStateToProps, mapDispatchToProps)(Lights);
+
+const useStyles = makeStyles((theme) => {
+  return {
+    paper: {
+      padding: theme.spacing(2),
+      margin: theme.spacing(2),
+    },
+  };
+});
