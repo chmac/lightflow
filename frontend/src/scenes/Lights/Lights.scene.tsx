@@ -103,6 +103,7 @@ const Lights = (props: Props) => {
       <Typography>
         <Button
           variant="contained"
+          color="primary"
           onClick={() => {
             goToBrightness();
           }}
@@ -128,6 +129,7 @@ const Lights = (props: Props) => {
       <Typography>
         <Button
           variant="contained"
+          color="primary"
           onClick={() => {
             goToColour();
           }}
