@@ -125,6 +125,15 @@ export const goToColour = (): ThunkAction<
   const { colour, timeMinutes } = state.Lights;
 
   const hueIndexes = getHueIndexes(state);
+  const selectedLights = getSelectedLights(state);
+
+  const message = `Set:
+- ${selectedLights.map((light) => light.name).join("\n- ")}
+to ${colour}
+over ${timeMinutes} minutes`;
+  if (!window.confirm(message)) {
+    return;
+  }
 
   try {
     await requestGraphql(GoToColour, {

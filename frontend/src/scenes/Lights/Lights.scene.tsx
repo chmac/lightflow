@@ -129,9 +129,7 @@ const Lights = (props: Props) => {
         <Button
           variant="contained"
           onClick={() => {
-            if (window.confirm("Are you sure?")) {
-              goToColour();
-            }
+            goToColour();
           }}
         >
           Go
