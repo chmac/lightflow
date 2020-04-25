@@ -6,5 +6,7 @@ const url =
     ? "http://localhost:4000/graphql"
     : "/graphql";
 
-export const requestGraphql = (query: string, variables?: Variables) =>
-  request(url, query, variables);
+export const requestGraphql = <T extends any>(
+  query: string,
+  variables?: Variables
+) => request<T>(url, query, variables);
