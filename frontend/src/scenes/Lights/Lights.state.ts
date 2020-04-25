@@ -24,9 +24,9 @@ export const fetchLights = (): ThunkAction<
   AppState,
   {},
   AnyAction
-> => async dispatch => {
+> => async (dispatch) => {
   dispatch({
-    type: FETCH
+    type: FETCH,
   });
 
   try {
@@ -35,8 +35,8 @@ export const fetchLights = (): ThunkAction<
     dispatch({
       type: FETCH_SUCCESS,
       payload: {
-        data
-      }
+        data,
+      },
     });
   } catch (e) {
     alert(`#12X9Mx Fetch failed with error. ${e.message}`);
@@ -54,8 +54,8 @@ export const check = (hueIndex: number): CheckAction => {
   return {
     type: CHECK,
     payload: {
-      hueIndex
-    }
+      hueIndex,
+    },
   };
 };
 
@@ -76,13 +76,13 @@ export const goToBrightness = (): ThunkAction<
       input: {
         hueIndexes,
         brightness,
-        timeMinutes
-      }
+        timeMinutes,
+      },
     });
 
     dispatch({
       type: GO_TO_BRIGHTNESS,
-      payload: {}
+      payload: {},
     });
   } catch (e) {
     debugger;
@@ -111,13 +111,13 @@ export const goToColour = (): ThunkAction<
       input: {
         hueIndexes,
         colour,
-        timeMinutes
-      }
+        timeMinutes,
+      },
     });
 
     dispatch({
       type: GO_TO_COLOUR,
-      payload: {}
+      payload: {},
     });
   } catch (e) {
     alert(`#bG4twO GoToColour failed with error: ${e.message}`);
@@ -133,8 +133,8 @@ export interface SetTimeMinutesAction extends Action<typeof SET_TIME_MINUTES> {
 export const setTimeMinutes = (timeMinutes: number): SetTimeMinutesAction => ({
   type: SET_TIME_MINUTES,
   payload: {
-    timeMinutes
-  }
+    timeMinutes,
+  },
 });
 
 const SET_BRIGHTNESS = "app/Lights/SET_BRIGHTNESS";
@@ -146,8 +146,8 @@ export interface SetBrightnessAction extends Action<typeof SET_BRIGHTNESS> {
 export const setBrightness = (brightness: number): SetBrightnessAction => ({
   type: SET_BRIGHTNESS,
   payload: {
-    brightness
-  }
+    brightness,
+  },
 });
 
 const SET_COLOUR = "app/Lights/SET_COLOUR";
@@ -159,8 +159,8 @@ export interface SetColourAction extends Action<typeof SET_COLOUR> {
 export const setColour = (colour: string): SetColourAction => ({
   type: SET_COLOUR,
   payload: {
-    colour
-  }
+    colour,
+  },
 });
 
 export type Actions =
@@ -205,7 +205,7 @@ const empty: LightsState = {
   lights: [],
   brightness: 254,
   colour: "orangered",
-  timeMinutes: 30
+  timeMinutes: 30,
 };
 
 export const reducer = (
@@ -216,39 +216,39 @@ export const reducer = (
     case FETCH_SUCCESS: {
       return {
         ...state,
-        lights: action.payload.data.lights.map(light => ({
+        lights: action.payload.data.lights.map((light) => ({
           data: light,
-          checked: false
-        }))
+          checked: false,
+        })),
       };
     }
     case CHECK: {
       return {
         ...state,
-        lights: state.lights.map(light => {
+        lights: state.lights.map((light) => {
           if (light.data.hueIndex === action.payload.hueIndex) {
             return { ...light, checked: !light.checked };
           }
           return light;
-        })
+        }),
       };
     }
     case SET_TIME_MINUTES: {
       return {
         ...state,
-        timeMinutes: action.payload.timeMinutes
+        timeMinutes: action.payload.timeMinutes,
       };
     }
     case SET_BRIGHTNESS: {
       return {
         ...state,
-        brightness: action.payload.brightness
+        brightness: action.payload.brightness,
       };
     }
     case SET_COLOUR: {
       return {
         ...state,
-        colour: action.payload.colour
+        colour: action.payload.colour,
       };
     }
   }
