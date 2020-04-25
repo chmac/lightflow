@@ -86,22 +86,20 @@ const Lights = (props: Props) => {
       </Select>
 
       <Typography variant="h2">Brightness</Typography>
-      <Typography>
-        <Select
-          className={classes.select}
-          value={brightness}
-          onChange={(e) => {
-            setBrightness(e.target.value as string);
-          }}
-        >
-          {/* We add 1 to the brightness levels here as this is 0 indexed */}
-          {Array.from({ length: BRIGHTNESS_UI_LEVELS + 1 }).map((v, index) => (
-            <MenuItem key={index} value={index}>
-              {Math.round((index / BRIGHTNESS_UI_LEVELS) * 100)}%
-            </MenuItem>
-          ))}
-        </Select>
-      </Typography>
+      <Select
+        className={classes.select}
+        value={brightness}
+        onChange={(e) => {
+          setBrightness(e.target.value as string);
+        }}
+      >
+        {/* We add 1 to the brightness levels here as this is 0 indexed */}
+        {Array.from({ length: BRIGHTNESS_UI_LEVELS + 1 }).map((v, index) => (
+          <MenuItem key={index} value={index}>
+            {Math.round((index / BRIGHTNESS_UI_LEVELS) * 100)}%
+          </MenuItem>
+        ))}
+      </Select>
       <Typography>
         <Button
           variant="contained"
@@ -116,21 +114,19 @@ const Lights = (props: Props) => {
       </Typography>
 
       <Typography variant="h2">Colour</Typography>
-      <Typography>
-        <Select
-          className={classes.select}
-          value={colour}
-          onChange={(e) => {
-            setColour(e.target.value as string);
-          }}
-        >
-          {colours.map((colour) => (
-            <MenuItem key={colour} value={colour}>
-              {colour}
-            </MenuItem>
-          ))}
-        </Select>
-      </Typography>
+      <Select
+        className={classes.select}
+        value={colour}
+        onChange={(e) => {
+          setColour(e.target.value as string);
+        }}
+      >
+        {colours.map((colour) => (
+          <MenuItem key={colour} value={colour}>
+            {colour}
+          </MenuItem>
+        ))}
+      </Select>
       <Typography>
         <Button
           variant="contained"
