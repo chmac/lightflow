@@ -57,6 +57,7 @@ const Lights = (props: Props) => {
 
     return (
       <FormControlLabel
+        key={hueIndex}
         control={
           <Checkbox onChange={() => check(hueIndex)} checked={light.checked} />
         }
