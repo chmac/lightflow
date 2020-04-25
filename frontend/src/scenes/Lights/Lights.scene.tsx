@@ -9,6 +9,8 @@ import {
   Button,
   Select,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 
 import { AppState } from "../../store";
@@ -54,21 +56,12 @@ const Lights = (props: Props) => {
     const onText = on ? "ON" : "OFF";
 
     return (
-      <Typography
-        key={hueIndex}
-        onClick={() => {
-          check(hueIndex);
-        }}
-        style={light.checked ? { backgroundColor: "lightgreen" } : {}}
-      >
-        <input
-          type="checkbox"
-          id={`lightToggle${hueIndex}`}
-          checked={light.checked}
-          readOnly={true}
-        ></input>{" "}
-        {name}: {onText}
-      </Typography>
+      <FormControlLabel
+        control={
+          <Checkbox onChange={() => check(hueIndex)} checked={light.checked} />
+        }
+        label={`${name}: ${onText}`}
+      />
     );
   };
 
