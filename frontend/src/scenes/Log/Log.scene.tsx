@@ -5,6 +5,11 @@ import { Paper, makeStyles, Typography, Button } from "@material-ui/core";
 
 import { AppState } from "../../store";
 
+const timestampToHuman = (timestamp: number) => {
+  var d = new Date(timestamp * 1e3);
+  return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+};
+
 const Log = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -25,13 +30,12 @@ const Log = () => {
       >
         Refresh
       </Button>
-      <ul>
-        {logs.reverse().map(({ message, time, params }, i) => (
-          <li key={i}>
-            {time}: {message}: {params}
-          </li>
-        ))}
-      </ul>
+      {logs.reverse().map(({ message, time, params }, i) => (
+        <Typography key={i} className={classes.item}>
+          {timestampToHuman(time)}: {message}
+          <br /> {params}
+        </Typography>
+      ))}
     </Paper>
   );
 };
@@ -43,6 +47,11 @@ const useStyles = makeStyles((theme) => {
     paper: {
       padding: theme.spacing(2),
       margin: theme.spacing(2),
+    },
+    item: {
+      borderBottom: "1px solid black",
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
   };
 });
