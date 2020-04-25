@@ -208,6 +208,8 @@ export const startServer = async ({ hue }: { hue: Hue }) => {
 };
 
 export const restartServer = () => {
+  process.exit();
+  return;
   httpServer.close();
   startGraphQLServer(server);
 };
