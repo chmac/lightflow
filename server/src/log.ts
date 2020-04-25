@@ -11,7 +11,7 @@ const history: LogMessage[] = [];
 export const log = (message: string, ...args) => {
   history.push({
     message,
-    params: JSON.stringify(args),
+    params: JSON.stringify(args, null, 2),
     time: Math.round(Date.now() / 1e3),
   });
 
