@@ -100,7 +100,7 @@ const Lights = (props: Props) => {
           {/* We add 1 to the brightness levels here as this is 0 indexed */}
           {Array.from({ length: BRIGHTNESS_UI_LEVELS + 1 }).map((v, index) => (
             <option key={index} value={index}>
-              {index}
+              {Math.round((index / BRIGHTNESS_UI_LEVELS) * 100)}%
             </option>
           ))}
         </select>
