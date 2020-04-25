@@ -6,6 +6,7 @@ import { store } from "./store";
 
 import Lights from "./scenes/Lights";
 import Log from "./scenes/Log/Log.scene";
+import Restart from "./scenes/Restart/Restart.scene";
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -14,11 +15,12 @@ const App: React.FC = () => {
     <Provider store={store}>
       <CssBaseline />
       <div className="App">
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           <Grid item sm={6} xs={12} className={classes.item}>
             <Lights />
           </Grid>
           <Grid item sm={6} xs={12} className={classes.item}>
+            <Restart />
             <Log />
           </Grid>
         </Grid>
