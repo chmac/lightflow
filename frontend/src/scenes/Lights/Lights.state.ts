@@ -76,6 +76,20 @@ export const goToBrightness = (): ThunkAction<
   );
 
   const hueIndexes = getHueIndexes(state);
+  const selectedLights = getSelectedLights(state);
+
+  if (hueIndexes.length === 0) {
+    alert("No lights selected. #GVuJTE");
+    return;
+  }
+
+  const message = `Set:
+- ${selectedLights.map((light) => light.name).join("\n- ")}
+to ${Math.round((brightnessTwenty / BRIGHTNESS_UI_LEVELS) * 100)}%
+over ${timeMinutes} minutes`;
+  if (!window.confirm(message)) {
+    return;
+  }
 
   try {
     await requestGraphql(GoToBrightness, {
@@ -177,13 +191,17 @@ export type Actions =
   | SetBrightnessAction
   | SetColourAction;
 
-export const getHueIndexes = (state: AppState) => {
-  return state.Lights.lights.reduce<number[]>((hueIndexes, light) => {
+export const getSelectedLights = (state: AppState) => {
+  return state.Lights.lights.reduce<LightData[]>((accumulator, light) => {
     if (light.checked) {
-      return hueIndexes.concat(light.data.hueIndex);
+      return accumulator.concat(light.data);
     }
-    return hueIndexes;
+    return accumulator;
   }, []);
+};
+
+export const getHueIndexes = (state: AppState) => {
+  return getSelectedLights(state).map(({ hueIndex }) => hueIndex);
 };
 
 type LightData = {
