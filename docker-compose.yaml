@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   lightflow:
-    build: "."
+    image: "lightflow"
     restart: "always"
     ports:
       - "4000:4000"
