@@ -17,6 +17,8 @@ import {
 } from "./Lights.state";
 import { colours } from "./colours";
 
+export const BRIGHTNESS_UI_LEVELS = 20;
+
 const Lights = (props: Props) => {
   const {
     lights,
@@ -95,7 +97,8 @@ const Lights = (props: Props) => {
             fontSize: "0.8em",
           }}
         >
-          {Array.from({ length: 21 }).map((v, index) => (
+          {/* We add 1 to the brightness levels here as this is 0 indexed */}
+          {Array.from({ length: BRIGHTNESS_UI_LEVELS + 1 }).map((v, index) => (
             <option key={index} value={index}>
               {index}
             </option>

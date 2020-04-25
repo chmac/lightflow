@@ -4,6 +4,7 @@ import { AppState } from "../../store";
 import { requestGraphql } from "../../requestGraphql";
 import { GetLights } from "./Lights.queries";
 import { GoToBrightness, GoToColour } from "./Lights.mutations";
+import { BRIGHTNESS_UI_LEVELS } from "./Lights.scene";
 
 const FETCH = "app/Lights/FETCH";
 const FETCH_SUCCESS = "app/Lights/FETCH_SUCCESS";
@@ -70,7 +71,9 @@ export const goToBrightness = (): ThunkAction<
   const { brightness: brightnessTwenty, timeMinutes } = state.Lights;
 
   // Convert the brightness figure on a scale of 0-20 to 0-255
-  const brightness = Math.round((brightnessTwenty * 255) / 20);
+  const brightness = Math.round(
+    (brightnessTwenty * 255) / BRIGHTNESS_UI_LEVELS
+  );
 
   const hueIndexes = getHueIndexes(state);
 
