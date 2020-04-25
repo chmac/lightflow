@@ -53,15 +53,14 @@ const startRunToBrightness = async ({
 
         await hue.setBrightness(hueIndex, nextBrightness);
 
-        log(
-          "Brightness #l7TYIY",
+        log("Brightness #l7TYIY", {
           hueIndex,
           currentBrightness,
           nextBrightness,
           step,
           remainingSteps,
-          totalSteps
-        );
+          totalSteps,
+        });
       });
 
       return new Promise((resolve) => {
