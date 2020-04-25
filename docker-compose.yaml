@@ -3,7 +3,7 @@ services:
   lightflow:
     build: "."
     restart: "always"
-    expose:
-      - "4000"
+    ports:
+      - "4000:4000"
     environment:
       - NODE_ENV=production
