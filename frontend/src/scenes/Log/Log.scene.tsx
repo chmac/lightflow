@@ -26,8 +26,8 @@ const Log = () => {
         Refresh
       </Button>
       <ul>
-        {logs.reverse().map(({ message, time, params }) => (
-          <li>
+        {logs.reverse().map(({ message, time, params }, i) => (
+          <li key={i}>
             {time}: {message}: {params}
           </li>
         ))}
