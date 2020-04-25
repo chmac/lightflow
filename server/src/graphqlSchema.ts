@@ -1,6 +1,8 @@
 import { GraphQLServer } from "graphql-yoga";
 import { Hue, Lamp, XYPoint } from "hue-hacking-node";
 import express from "express";
+import { Server as HttpServer } from "http";
+import { Server as HttpsServer } from "https";
 import path from "path";
 
 import { getLights } from "./utils";
@@ -83,9 +85,18 @@ type GoToBrightnessResponse {
   success: Boolean
 }
 
+type RestartResponse {
+  """
+  This indicates that the request succeeded, and that the server will restart
+  in 1 second (to ensure this request has completed first).
+  """
+  success: Boolean
+}
+
 type Mutation {
   goToColour(input: GoToColourInput!): GoToColourResponse
   goToBrightness(input: GoToBrightnessInput!): GoToBrightnessResponse
+  restart: RestartResponse
 }
 `;
 
@@ -158,14 +169,32 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
         assertHueIndexes(hueIndexes);
         return goToBrightness({ hue, hueIndexes, brightness, timeMinutes });
       },
+      restart: () => {
+        setTimeout(() => {
+          restartServer();
+        }, 1e3);
+        return { success: true };
+      },
     },
   };
 };
 
-export const startServer = ({ hue }: { hue: Hue }) => {
+let server: GraphQLServer;
+let httpServer: HttpServer | HttpsServer;
+
+const startGraphQLServer = async (server: GraphQLServer) => {
+  httpServer = await server.start(
+    { endpoint: "/graphql", playground: "/graphiql" },
+    () => {
+      console.log("Server started on localhost:4000 #AUJVSy");
+    }
+  );
+};
+
+export const startServer = async ({ hue }: { hue: Hue }) => {
   const resolvers = makeResolvers({ hue });
 
-  const server = new GraphQLServer({ typeDefs, resolvers });
+  server = new GraphQLServer({ typeDefs, resolvers });
 
   server.express.use(
     express.static(path.join(__dirname, "../../frontend/build"))
@@ -175,9 +204,10 @@ export const startServer = ({ hue }: { hue: Hue }) => {
     res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
-  server.start({ endpoint: "/graphql", playground: "/graphiql" }, () => {
-    console.log("Server started on localhost:4000 #AUJVSy");
-  });
+  await startGraphQLServer(server);
+};
 
-  return server;
+export const restartServer = () => {
+  httpServer.close();
+  startGraphQLServer(server);
 };
