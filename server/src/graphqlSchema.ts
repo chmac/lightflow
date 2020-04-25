@@ -179,22 +179,12 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
   };
 };
 
-let server: GraphQLServer;
-let httpServer: HttpServer | HttpsServer;
-
-const startGraphQLServer = async (server: GraphQLServer) => {
-  httpServer = await server.start(
-    { endpoint: "/graphql", playground: "/graphiql" },
-    () => {
-      console.log("Server started on localhost:4000 #AUJVSy");
-    }
-  );
-};
+const startGraphQLServer = async (server: GraphQLServer) => {};
 
 export const startServer = async ({ hue }: { hue: Hue }) => {
   const resolvers = makeResolvers({ hue });
 
-  server = new GraphQLServer({ typeDefs, resolvers });
+  const server = new GraphQLServer({ typeDefs, resolvers });
 
   server.express.use(
     express.static(path.join(__dirname, "../../frontend/build"))
@@ -204,12 +194,17 @@ export const startServer = async ({ hue }: { hue: Hue }) => {
     res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
-  await startGraphQLServer(server);
+  await server.start(
+    {
+      endpoint: "/graphql",
+      playground: "/graphiql",
+    },
+    () => {
+      console.log("Server started on localhost:4000 #AUJVSy");
+    }
+  );
 };
 
 export const restartServer = () => {
   process.exit();
-  return;
-  httpServer.close();
-  startGraphQLServer(server);
 };
