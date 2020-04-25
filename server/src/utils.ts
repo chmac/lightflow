@@ -1,6 +1,6 @@
 import { Hue, Lamp, HueUPNPResponse } from "hue-hacking-node";
 
-import { HUE_USERNAME } from "./config/private";
+import { HUE_USERNAME, STEP_INTERVAL_MS } from "./config/private";
 
 export const getBridgeIp = async () => {
   const foundBridges: HueUPNPResponse[] = await Hue.search();
@@ -20,7 +20,7 @@ export const getHue = async () => {
     const ip = await getBridgeIp();
     hue = new Hue({
       ip,
-      key: HUE_USERNAME
+      key: HUE_USERNAME,
     });
   }
 
@@ -47,4 +47,8 @@ export const findLightByHueIndex = (lights: Lamp[], hueIndex: number) => {
     throw new Error("Failed to find light. #srh6sh");
   }
   return light;
+};
+
+export const getStepInterval = (timeMs: number): number => {
+  return timeMs > 60e3 ? STEP_INTERVAL_MS : 2e3;
 };

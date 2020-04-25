@@ -1,9 +1,7 @@
 import { eachSeries, timesSeries } from "async";
-import { Hue, HueColors } from "hue-hacking-node";
+import { Hue } from "hue-hacking-node";
 
-import { STEP_INTERVAL } from "../constants";
-import { getLights, findLightByHueIndex } from "../utils";
-import { STEP_INTERVAL_MS } from "../config/private";
+import { findLightByHueIndex, getStepInterval } from "../utils";
 import { log } from "../log";
 
 const calculateNextBrightness = ({
@@ -32,7 +30,8 @@ const startRunToBrightness = async ({
   targetBrightness: number;
   timeMs: number;
 }) => {
-  const totalSteps = Math.ceil(timeMs / STEP_INTERVAL);
+  const stepInterval = getStepInterval(timeMs);
+  const totalSteps = Math.ceil(timeMs / stepInterval);
 
   timesSeries(
     totalSteps,
@@ -66,7 +65,7 @@ const startRunToBrightness = async ({
       });
 
       return new Promise((resolve) => {
-        setTimeout(resolve, STEP_INTERVAL_MS);
+        setTimeout(resolve, stepInterval);
       });
     },
     (err, result) => {
