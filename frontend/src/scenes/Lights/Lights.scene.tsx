@@ -95,7 +95,7 @@ const Lights = (props: Props) => {
             fontSize: "0.8em",
           }}
         >
-          {Array.from({ length: 255 }).map((v, index) => (
+          {Array.from({ length: 21 }).map((v, index) => (
             <option key={index} value={index}>
               {index}
             </option>

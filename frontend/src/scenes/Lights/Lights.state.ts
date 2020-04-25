@@ -67,7 +67,10 @@ export const goToBrightness = (): ThunkAction<
   AnyAction
 > => async (dispatch, getState) => {
   const state = getState();
-  const { brightness, timeMinutes } = state.Lights;
+  const { brightness: brightnessTwenty, timeMinutes } = state.Lights;
+
+  // Convert the brightness figure on a scale of 0-20 to 0-255
+  const brightness = Math.round((brightnessTwenty * 255) / 20);
 
   const hueIndexes = getHueIndexes(state);
 
@@ -203,7 +206,7 @@ type LightsState = {
 
 const empty: LightsState = {
   lights: [],
-  brightness: 254,
+  brightness: 20,
   colour: "orangered",
   timeMinutes: 30,
 };
