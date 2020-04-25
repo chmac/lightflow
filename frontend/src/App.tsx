@@ -1,6 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, makeStyles, CssBaseline } from "@material-ui/core";
 
 import { store } from "./store";
 
@@ -12,6 +12,7 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
+      <CssBaseline />
       <div className="App">
         <Grid container spacing={2}>
           <Grid item sm={6} xs={12} className={classes.item}>
