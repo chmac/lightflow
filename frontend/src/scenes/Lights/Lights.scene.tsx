@@ -12,7 +12,7 @@ import {
   setBrightness,
   goToBrightness,
   setColour,
-  goToColour
+  goToColour,
 } from "./Lights.state";
 import { colours } from "./colours";
 
@@ -28,7 +28,7 @@ const Lights = (props: Props) => {
     setTimeMinutes,
     brightness,
     setBrightness,
-    goToBrightness
+    goToBrightness,
   } = props;
 
   useEffect(() => {
@@ -67,15 +67,15 @@ const Lights = (props: Props) => {
       {lights.length > 0 ? lights.map(LightSingle) : null}
       <h2>Timing</h2>
       <select
-        onChange={e => {
+        onChange={(e) => {
           setTimeMinutes(e.target.value);
         }}
         value={timeMinutes}
         style={{
-          fontSize: "0.8em"
+          fontSize: "0.8em",
         }}
       >
-        {[1, 10, 20, 30, 60].map(minutes => (
+        {[1, 10, 20, 30, 60].map((minutes) => (
           <option key={minutes} value={minutes}>
             {minutes} minute{minutes > 1 ? "s" : ""}
           </option>
@@ -86,11 +86,11 @@ const Lights = (props: Props) => {
       <p>
         <select
           value={brightness}
-          onChange={e => {
+          onChange={(e) => {
             setBrightness(e.target.value);
           }}
           style={{
-            fontSize: "0.8em"
+            fontSize: "0.8em",
           }}
         >
           {Array.from({ length: 255 }).map((v, index) => (
@@ -108,7 +108,7 @@ const Lights = (props: Props) => {
             }
           }}
           style={{
-            fontSize: "0.8em"
+            fontSize: "0.8em",
           }}
         >
           Go
@@ -119,14 +119,14 @@ const Lights = (props: Props) => {
       <p>
         <select
           value={colour}
-          onChange={e => {
+          onChange={(e) => {
             setColour(e.target.value);
           }}
           style={{
-            fontSize: "0.8em"
+            fontSize: "0.8em",
           }}
         >
-          {colours.map(colour => (
+          {colours.map((colour) => (
             <option key={colour} value={colour}>
               {colour}
             </option>
@@ -141,7 +141,7 @@ const Lights = (props: Props) => {
             }
           }}
           style={{
-            fontSize: "0.8em"
+            fontSize: "0.8em",
           }}
         >
           Go
@@ -156,7 +156,7 @@ const mapStateToProps = (state: AppState) => {
     lights: state.Lights.lights,
     brightness: state.Lights.brightness,
     colour: state.Lights.colour,
-    timeMinutes: state.Lights.timeMinutes
+    timeMinutes: state.Lights.timeMinutes,
   };
 };
 
@@ -172,7 +172,7 @@ const mapDispatchToProps = (
       dispatch(setBrightness(parseInt(brightness))),
     goToBrightness: () => dispatch(goToBrightness()),
     setColour: (colour: string) => dispatch(setColour(colour)),
-    goToColour: () => dispatch(goToColour())
+    goToColour: () => dispatch(goToColour()),
   };
 };
 
