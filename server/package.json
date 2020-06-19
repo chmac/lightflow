@@ -17,7 +17,7 @@
     "async": "^3.1.0",
     "express": "^4.17.1",
     "graphql-yoga": "^1.18.3",
-    "hue-hacking-node": "^1.5.0",
+    "hue-hacking-node": "^1.6.0",
     "lodash": "^4.17.15",
     "nedb": "^1.8.0",
     "path": "^0.12.7"
