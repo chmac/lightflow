@@ -179,8 +179,6 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
   };
 };
 
-const startGraphQLServer = async (server: GraphQLServer) => {};
-
 export const startServer = async ({ hue }: { hue: Hue }) => {
   const resolvers = makeResolvers({ hue });
 
