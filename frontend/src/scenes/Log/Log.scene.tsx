@@ -13,7 +13,7 @@ const timestampToHuman = (timestamp: number) => {
 const Log = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const logs = useSelector((state: AppState) => state.Log.log.slice(20));
+  const logs = useSelector((state: AppState) => state.Log.log.slice(0, 20));
 
   useEffect(() => {
     dispatch(fetchLog());
