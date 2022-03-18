@@ -17,6 +17,7 @@
     "@types/lodash": "^4.14.144",
     "@types/nedb": "^1.8.9",
     "async": "^3.1.0",
+    "debug": "^4.3.4",
     "express": "^4.17.1",
     "graphql-yoga": "^1.18.3",
     "hue-hacking-node": "^1.6.0",
@@ -25,6 +26,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/node": "^12.12.5",
     "@vercel/ncc": "^0.33.3",
     "nodemon": "^1.19.4",
