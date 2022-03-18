@@ -23,9 +23,6 @@ COPY server/yarn.lock yarn.lock
 RUN yarn install
 RUN yarn build
 
-# We expose port 4000 as that's where the app runs by default
-EXPOSE 4000
-
 # ------------------------------------------------------------------------------
 # From builder to production image
 # ------------------------------------------------------------------------------
@@ -41,5 +38,7 @@ WORKDIR /usr/src/
 
 COPY --from=builder /usr/src/frontend/build/ ./frontend/build/
 COPY --from=builder /usr/src/server/dist/ ./server/dist/
+
+EXPOSE 4000
 
 CMD [ "node", "server/dist" ]
