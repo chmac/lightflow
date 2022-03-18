@@ -3,6 +3,10 @@ import { Hue, Lamp, HueUPNPResponse } from "hue-hacking-node";
 import { HUE_USERNAME, STEP_INTERVAL_MS } from "./config/private";
 
 export const getBridgeIp = async () => {
+  if ("HUE_IP" in process.env) {
+    return process.env.HUE_IP;
+  }
+
   const foundBridges: HueUPNPResponse[] = await Hue.search();
 
   if (foundBridges.length !== 1) {
