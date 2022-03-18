@@ -14,7 +14,11 @@ const sendRestart = async () => {
         alert("Restart success. #FQK6li");
       }
     } catch (error) {
-      alert(`Restart failed. #arN4YX\n${error.message}`);
+      alert(
+        `Restart failed. #arN4YX\n${
+          error instanceof Error ? error.message : JSON.stringify(error)
+        }`
+      );
     }
 };
 
