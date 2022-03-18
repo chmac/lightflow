@@ -1,14 +1,11 @@
+import express from "express";
 import { GraphQLServer } from "graphql-yoga";
 import { Hue, Lamp, XYPoint } from "hue-hacking-node";
-import express from "express";
-import { Server as HttpServer } from "http";
-import { Server as HttpsServer } from "https";
 import path from "path";
-
-import { getLights } from "./utils";
-import { goToColour } from "./mutations/goToColour";
-import { goToBrightness } from "./mutations/goToBrightness";
 import { getLog } from "./log";
+import { goToBrightness } from "./mutations/goToBrightness";
+import { goToColour } from "./mutations/goToColour";
+import { getLights } from "./utils";
 
 const typeDefs = `
 type LightState {
