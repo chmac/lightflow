@@ -50,11 +50,6 @@ export const getLights = async (hue: Hue) => {
     console.log(error);
     throw error;
   }
-  if (!lamps) {
-    lamps = await hue.getLamps();
-  }
-
-  return lamps;
 };
 
 export const findLightByHueIndex = (lights: Lamp[], hueIndex: number) => {
