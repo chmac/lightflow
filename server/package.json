@@ -8,7 +8,7 @@
     "debug": "NODE_ENV='debug' nodemon",
     "build:clean": "rimraf dist/",
     "build:ncc": "ncc build src/index.ts -o dist",
-    "build": "yarn build:clean && yarn build:ncc"
+    "build": "yarn run build:clean && yarn run build:ncc"
   },
   "author": "Callum Macdonald <git@callum-macdonald.com>",
   "license": " AGPL-3.0-or-later",
