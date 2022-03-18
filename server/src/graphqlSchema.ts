@@ -219,7 +219,7 @@ export const startServer = async () => {
     {
       endpoint: "/graphql",
       playground: process.env.NODE_ENV === "development" ? "/graphiql" : false,
-      debug: typeof process.env.DEBUG === "string" ? true : false,
+      debug: typeof process.env.DEBUG_GRAPHQL === "string" ? true : false,
     },
     () => {
       console.log(`Server started on localhost:4000 #AUJVSy`);
