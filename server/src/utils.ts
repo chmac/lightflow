@@ -41,7 +41,13 @@ let lamps: Lamp[];
 // NOTE: The `hue-hacking-node` package calls them Lamps, but Hue calls them
 // lights, so we use the Hue naming and wrap the underlying methods.
 export const getLights = async (hue: Hue) => {
-  return hue.getLamps();
+  try {
+    return hue.getLamps();
+  } catch (error) {
+    console.log(`getLights threw #lA46at`);
+    console.log(error);
+    throw error;
+  }
   if (!lamps) {
     lamps = await hue.getLamps();
   }
