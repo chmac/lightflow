@@ -46,7 +46,7 @@ export const toColour = async ({
     totalSteps,
     async (step) => {
       const remainingSteps = totalSteps - step;
-      const lights = await getLights();
+      const lights = await getLights(hue);
 
       await eachSeries(targetIndexes, async (hueIndex) => {
         const light = findLightByHueIndex(lights, hueIndex);

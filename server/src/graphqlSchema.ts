@@ -1,11 +1,11 @@
 import express from "express";
 import { GraphQLServer } from "graphql-yoga";
-import { Hue, Lamp, XYPoint } from "hue-hacking-node";
+import { Lamp, XYPoint } from "hue-hacking-node";
 import path from "path";
 import { getLog } from "./log";
 import { goToBrightness } from "./mutations/goToBrightness";
 import { goToColour } from "./mutations/goToColour";
-import { getLights } from "./utils";
+import { getHue, getLights } from "./utils";
 
 const typeDefs = `
 type LightState {
@@ -121,25 +121,35 @@ const assertHueIndexes = (hueIndexes: number[]) => {
   }
 };
 
-const makeResolvers = ({ hue }: { hue: Hue }) => {
+const makeResolvers = () => {
   return {
     LightState: {
       brightness: getProp("bri"),
       colourTemperature: getProp("ct"),
       saturation: getProp("sat"),
-      xyAsHex: (state) =>
-        !!state.xy ? hue.colors.CIE1931ToHex(new XYPoint(...state.xy)) : null,
+      xyAsHex: async (state, _, { HUE_USERNAME }) => {
+        const hue = await getHue({ HUE_USERNAME });
+        return !!state.xy
+          ? hue.colors.CIE1931ToHex(new XYPoint(...state.xy))
+          : null;
+      },
     },
     Light: {
       hueIndex: (light: Lamp) => light.lampIndex,
     },
     Query: {
-      xyToRGB: (root, { x, y }: { x: number; y: number }) => {
+      xyToRGB: async (
+        root,
+        { x, y }: { x: number; y: number },
+        { HUE_USERNAME }
+      ) => {
+        const hue = await getHue({ HUE_USERNAME });
         return hue.colors.CIE1931ToHex(new XYPoint(x, y));
       },
-      lights: async (root, args: LightsArgs) => {
+      lights: async (root, args: LightsArgs, { HUE_USERNAME }) => {
         const { name } = args;
-        const lights = await getLights();
+        const hue = await getHue({ HUE_USERNAME });
+        const lights = await getLights(hue);
         if (!!name) {
           return lights.filter(
             (light) =>
@@ -153,17 +163,24 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
       },
     },
     Mutation: {
-      goToColour: async (root, args: { input: GoToColourInputArgs }) => {
+      goToColour: async (
+        root,
+        args: { input: GoToColourInputArgs },
+        { HUE_USERNAME }
+      ) => {
         const { hueIndexes, colour, timeMinutes } = args.input;
         assertHueIndexes(hueIndexes);
+        const hue = await getHue({ HUE_USERNAME });
         return goToColour({ hue, hueIndexes, colour, timeMinutes });
       },
       goToBrightness: async (
         root,
-        args: { input: GoToBrightnessInputArgs }
+        args: { input: GoToBrightnessInputArgs },
+        { HUE_USERNAME }
       ) => {
         const { hueIndexes, brightness, timeMinutes } = args.input;
         assertHueIndexes(hueIndexes);
+        const hue = await getHue({ HUE_USERNAME });
         return goToBrightness({ hue, hueIndexes, brightness, timeMinutes });
       },
       restart: () => {
@@ -176,10 +193,19 @@ const makeResolvers = ({ hue }: { hue: Hue }) => {
   };
 };
 
-export const startServer = async ({ hue }: { hue: Hue }) => {
-  const resolvers = makeResolvers({ hue });
+export const startServer = async () => {
+  const resolvers = makeResolvers();
 
-  const server = new GraphQLServer({ typeDefs, resolvers });
+  const server = new GraphQLServer({
+    typeDefs,
+    resolvers,
+    context: ({ request }) => {
+      if ("authorization" in request.headers) {
+        return { HUE_USERNAME: request.headers.authorization };
+      }
+      return {};
+    },
+  });
 
   server.express.use(
     express.static(path.join(__dirname, "../../frontend/build"))

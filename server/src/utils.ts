@@ -1,6 +1,13 @@
-import { Hue, Lamp, HueUPNPResponse } from "hue-hacking-node";
+import { Hue, HueUPNPResponse, Lamp } from "hue-hacking-node";
+import { HUE_USERNAME, STEP_INTERVAL_MS } from "./config";
 
-import { HUE_USERNAME, STEP_INTERVAL_MS } from "./config/private";
+const getHueUsername = () => {
+  if (typeof HUE_USERNAME !== "string" || HUE_USERNAME.length === 0) {
+    throw new Error("HUE_USERNAME env not set #ftXIkK");
+  }
+
+  return HUE_USERNAME;
+};
 
 export const getBridgeIp = async () => {
   if ("HUE_IP" in process.env) {
@@ -19,7 +26,13 @@ export const getBridgeIp = async () => {
 
 let hue: Hue;
 
-export const getHue = async () => {
+export const getHue = async ({ HUE_USERNAME }: { HUE_USERNAME?: string }) => {
+  if (typeof HUE_USERNAME !== "string" || HUE_USERNAME.length === 0) {
+    throw new Error(
+      `Missing HUE_USERNAME (did you set it as an Authorization header?) #crcChF`
+    );
+  }
+
   if (!hue) {
     const ip = await getBridgeIp();
     hue = new Hue({
@@ -35,8 +48,7 @@ let lamps: Lamp[];
 
 // NOTE: The `hue-hacking-node` package calls them Lamps, but Hue calls them
 // lights, so we use the Hue naming and wrap the underlying methods.
-export const getLights = async () => {
-  const hue = await getHue();
+export const getLights = async (hue: Hue) => {
   return hue.getLamps();
   if (!lamps) {
     lamps = await hue.getLamps();
