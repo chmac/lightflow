@@ -5,7 +5,7 @@ import path from "path";
 import { getLog } from "./log";
 import { goToBrightness } from "./mutations/goToBrightness";
 import { goToColour } from "./mutations/goToColour";
-import { getHue, getLights } from "./utils";
+import { getBridgeIp, getHue, getLights } from "./utils";
 
 const typeDefs = `
 type LightState {
@@ -215,15 +215,22 @@ export const startServer = async () => {
     res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
   });
 
-  await server.start(
-    {
-      endpoint: "/graphql",
-      playground: "/graphiql",
-    },
-    () => {
-      console.log("Server started on localhost:4000 #AUJVSy");
-    }
-  );
+  // We only expose the GraphQL playground in development
+  const settings =
+    process.env.NODE_ENV === "development"
+      ? {
+          endpoint: "/graphql",
+          playground: "/graphiql",
+        }
+      : {
+          endpoint: "/graphql",
+        };
+
+  await server.start(settings, () => {
+    console.log(`Server started on localhost:4000 #AUJVSy`);
+  });
+  const bridgeIp = await getBridgeIp();
+  console.log(`Hue IP is ${bridgeIp} #I2h8up`);
 };
 
 export const restartServer = () => {
