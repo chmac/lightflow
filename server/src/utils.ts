@@ -16,8 +16,6 @@ export const getBridgeIp = async () => {
   return foundBridges[0].internalipaddress;
 };
 
-let hue: Hue;
-
 export const getHue = async ({ HUE_USERNAME }: { HUE_USERNAME?: string }) => {
   if (typeof HUE_USERNAME !== "string" || HUE_USERNAME.length === 0) {
     throw new Error(
@@ -25,13 +23,12 @@ export const getHue = async ({ HUE_USERNAME }: { HUE_USERNAME?: string }) => {
     );
   }
 
-  if (!hue) {
-    const ip = await getBridgeIp();
-    hue = new Hue({
-      ip,
-      key: HUE_USERNAME,
-    });
-  }
+  const ip = await getBridgeIp();
+
+  const hue = new Hue({
+    ip,
+    key: HUE_USERNAME,
+  });
 
   return hue;
 };
