@@ -1,13 +1,5 @@
 import { Hue, HueUPNPResponse, Lamp } from "hue-hacking-node";
-import { HUE_USERNAME, STEP_INTERVAL_MS } from "./config";
-
-const getHueUsername = () => {
-  if (typeof HUE_USERNAME !== "string" || HUE_USERNAME.length === 0) {
-    throw new Error("HUE_USERNAME env not set #ftXIkK");
-  }
-
-  return HUE_USERNAME;
-};
+import { STEP_INTERVAL_MS } from "./config";
 
 export const getBridgeIp = async () => {
   if ("HUE_IP" in process.env) {
