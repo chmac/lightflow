@@ -1,5 +1,6 @@
 import { Hue, HueUPNPResponse, Lamp } from "hue-hacking-node";
 import { STEP_INTERVAL_MS } from "./config";
+import { debug } from "./debug";
 
 export const getBridgeIp = async () => {
   if ("HUE_IP" in process.env) {
@@ -30,6 +31,8 @@ export const getHue = async ({ HUE_USERNAME }: { HUE_USERNAME?: string }) => {
     key: HUE_USERNAME,
   });
 
+  debug.extend("getHue")(`#udVWqi IP: ${ip} Username: ${HUE_USERNAME}`);
+
   return hue;
 };
 
@@ -39,7 +42,9 @@ let lamps: Lamp[];
 // lights, so we use the Hue naming and wrap the underlying methods.
 export const getLights = async (hue: Hue) => {
   try {
-    return hue.getLamps();
+    const lights = hue.getLamps();
+    debug.extend("getLights")(`#AntRKF ${JSON.stringify(lights)}`);
+    return lights;
   } catch (error) {
     console.log(`getLights threw #lA46at`);
     console.log(error);
