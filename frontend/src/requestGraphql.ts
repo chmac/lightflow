@@ -16,6 +16,10 @@ export const setHueUsername = (HUE_USERNAME: string) => {
   globalThis.localStorage.setItem(KEY, HUE_USERNAME);
 };
 
+export const removeHueUsername = () => {
+  globalThis.localStorage.removeItem(KEY);
+};
+
 const url =
   process.env.NODE_ENV === "development"
     ? "http://localhost:4000/graphql"
