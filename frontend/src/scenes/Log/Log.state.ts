@@ -18,29 +18,25 @@ export interface FetchSuccessAction extends Action<typeof FETCH_SUCCESS> {
   };
 }
 
-export const fetchLog = (): ThunkAction<
-  void,
-  AppState,
-  {},
-  AnyAction
-> => async (dispatch) => {
-  dispatch({
-    type: FETCH,
-  });
-
-  try {
-    const data = await requestGraphql(GetLog);
-
+export const fetchLog =
+  (): ThunkAction<void, AppState, {}, AnyAction> => async (dispatch) => {
     dispatch({
-      type: FETCH_SUCCESS,
-      payload: {
-        data,
-      },
+      type: FETCH,
     });
-  } catch (e) {
-    alert(`#12X9Mx Fetch failed with error. ${e.message}`);
-  }
-};
+
+    try {
+      const data = await requestGraphql(GetLog);
+
+      dispatch({
+        type: FETCH_SUCCESS,
+        payload: {
+          data,
+        },
+      });
+    } catch (e) {
+      alert(`#12X9Mx Fetch failed with error. ${e.message}`);
+    }
+  };
 
 export type Actions = FetchAction | FetchSuccessAction;
 

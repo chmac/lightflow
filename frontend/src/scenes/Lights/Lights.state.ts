@@ -20,29 +20,25 @@ export interface FetchSuccessAction extends Action<typeof FETCH_SUCCESS> {
   };
 }
 
-export const fetchLights = (): ThunkAction<
-  void,
-  AppState,
-  {},
-  AnyAction
-> => async (dispatch) => {
-  dispatch({
-    type: FETCH,
-  });
-
-  try {
-    const data = await requestGraphql(GetLights);
-
+export const fetchLights =
+  (): ThunkAction<void, AppState, {}, AnyAction> => async (dispatch) => {
     dispatch({
-      type: FETCH_SUCCESS,
-      payload: {
-        data,
-      },
+      type: FETCH,
     });
-  } catch (e) {
-    alert(`#12X9Mx Fetch failed with error. ${e.message}`);
-  }
-};
+
+    try {
+      const data = await requestGraphql(GetLights);
+
+      dispatch({
+        type: FETCH_SUCCESS,
+        payload: {
+          data,
+        },
+      });
+    } catch (e) {
+      alert(`#12X9Mx Fetch failed with error. ${e.message}`);
+    }
+  };
 
 const CHECK = "app/Lights/CHECK";
 export interface CheckAction extends Action<typeof CHECK> {
@@ -61,97 +57,91 @@ export const check = (hueIndex: number): CheckAction => {
 };
 
 const GO_TO_BRIGHTNESS = "app/Lights/GO_TO_BRIGHTNESS";
-export const goToBrightness = (): ThunkAction<
-  void,
-  AppState,
-  {},
-  AnyAction
-> => async (dispatch, getState) => {
-  const state = getState();
-  const { brightness: brightnessTwenty, timeMinutes } = state.Lights;
+export const goToBrightness =
+  (): ThunkAction<void, AppState, {}, AnyAction> =>
+  async (dispatch, getState) => {
+    const state = getState();
+    const { brightness: brightnessTwenty, timeMinutes } = state.Lights;
 
-  // Convert the brightness figure on a scale of 0-20 to 0-255
-  const brightness = Math.round(
-    (brightnessTwenty * 255) / BRIGHTNESS_UI_LEVELS
-  );
+    // Convert the brightness figure on a scale of 0-20 to 0-255
+    const brightness = Math.round(
+      (brightnessTwenty * 255) / BRIGHTNESS_UI_LEVELS
+    );
 
-  const hueIndexes = getHueIndexes(state);
-  const selectedLights = getSelectedLights(state);
+    const hueIndexes = getHueIndexes(state);
+    const selectedLights = getSelectedLights(state);
 
-  if (hueIndexes.length === 0) {
-    alert("No lights selected. #GVuJTE");
-    return;
-  }
+    if (hueIndexes.length === 0) {
+      alert("No lights selected. #GVuJTE");
+      return;
+    }
 
-  const message = `Set:
+    const message = `Set:
 - ${selectedLights.map((light) => light.name).join("\n- ")}
 to ${Math.round((brightnessTwenty / BRIGHTNESS_UI_LEVELS) * 100)}%
 over ${timeMinutes} minutes`;
-  if (!window.confirm(message)) {
-    return;
-  }
+    if (!window.confirm(message)) {
+      return;
+    }
 
-  try {
-    await requestGraphql(GoToBrightness, {
-      input: {
-        hueIndexes,
-        brightness,
-        timeMinutes,
-      },
-    });
+    try {
+      await requestGraphql(GoToBrightness, {
+        input: {
+          hueIndexes,
+          brightness,
+          timeMinutes,
+        },
+      });
 
-    dispatch({
-      type: GO_TO_BRIGHTNESS,
-      payload: {},
-    });
-  } catch (e) {
-    debugger;
-    alert(`#oek0su GoToBrigthness failed with error: ${e.message}`);
-  }
-};
+      dispatch({
+        type: GO_TO_BRIGHTNESS,
+        payload: {},
+      });
+    } catch (e) {
+      debugger;
+      alert(`#oek0su GoToBrigthness failed with error: ${e.message}`);
+    }
+  };
 
 const GO_TO_COLOUR = "app/Lights/GO_TO_COLOUR";
 export interface ToBrightnessAction extends Action<typeof GO_TO_COLOUR> {
   payload: {};
 }
 
-export const goToColour = (): ThunkAction<
-  void,
-  AppState,
-  {},
-  AnyAction
-> => async (dispatch, getState) => {
-  const state = getState();
-  const { colour, timeMinutes } = state.Lights;
+export const goToColour =
+  (): ThunkAction<void, AppState, {}, AnyAction> =>
+  async (dispatch, getState) => {
+    const state = getState();
+    const { colour, timeMinutes } = state.Lights;
 
-  const hueIndexes = getHueIndexes(state);
-  const selectedLights = getSelectedLights(state);
+    const hueIndexes = getHueIndexes(state);
+    const selectedLights = getSelectedLights(state);
 
-  const message = `Set:
+    const message = `Set:
 - ${selectedLights.map((light) => light.name).join("\n- ")}
 to ${colour}
 over ${timeMinutes} minutes`;
-  if (!window.confirm(message)) {
-    return;
-  }
+    if (!window.confirm(message)) {
+      return;
+    }
 
-  try {
-    await requestGraphql(GoToColour, {
-      input: {
-        hueIndexes,
-        colour,
-        timeMinutes,
-      },
-    });
+    try {
+      await requestGraphql(GoToColour, {
+        input: {
+          hueIndexes,
+          colour,
+          timeMinutes,
+        },
+      });
 
-    dispatch({
-      type: GO_TO_COLOUR,
-      payload: {},
-    });
-  } catch (e) {
-    alert(`#bG4twO GoToColour failed with error: ${e.message}`);
-  }
-};
+      dispatch({
+        type: GO_TO_COLOUR,
+        payload: {},
+      });
+    } catch (e) {
+      alert(`#bG4twO GoToColour failed with error: ${e.message}`);
+    }
+  };
 
 const SET_TIME_MINUTES = "app/Lights/SET_TIME_MINUTES";
 export interface SetTimeMinutesAction extends Action<typeof SET_TIME_MINUTES> {
