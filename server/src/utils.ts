@@ -46,8 +46,8 @@ export const getLights = async (hue: Hue) => {
     debug.extend("getLights")(`#AntRKF ${JSON.stringify(lights)}`);
     return lights;
   } catch (error) {
-    console.log(`getLights threw #lA46at`);
-    console.log(error);
+    console.error(`getLights threw #lA46at`);
+    console.error(error);
     throw error;
   }
 };
