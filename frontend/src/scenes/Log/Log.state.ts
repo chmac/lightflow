@@ -34,7 +34,7 @@ export const fetchLog =
         },
       });
     } catch (e) {
-      alert(`#12X9Mx Fetch failed with error. ${e.message}`);
+      alert(`#oHDmxE Fetch failed with error. ${e.message}`);
     }
   };
 
