@@ -34,7 +34,11 @@ export const fetchLog =
         },
       });
     } catch (e) {
-      alert(`#oHDmxE Fetch failed with error. ${e.message}`);
+      alert(
+        `#oHDmxE Fetch failed with error. ${
+          e instanceof Error ? e.message : JSON.stringify(e)
+        }`
+      );
     }
   };
 

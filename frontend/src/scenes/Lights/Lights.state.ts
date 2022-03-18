@@ -36,7 +36,11 @@ export const fetchLights =
         },
       });
     } catch (e) {
-      alert(`#12X9Mx Fetch failed with error. ${e.message}`);
+      alert(
+        `#12X9Mx Fetch failed with error. ${
+          e instanceof Error ? e.message : JSON.stringify(e)
+        }`
+      );
     }
   };
 
@@ -99,7 +103,11 @@ over ${timeMinutes} minutes`;
       });
     } catch (e) {
       debugger;
-      alert(`#oek0su GoToBrigthness failed with error: ${e.message}`);
+      alert(
+        `#oek0su GoToBrigthness failed with error: ${
+          e instanceof Error ? e.message : JSON.stringify(e)
+        }`
+      );
     }
   };
 
@@ -139,7 +147,11 @@ over ${timeMinutes} minutes`;
         payload: {},
       });
     } catch (e) {
-      alert(`#bG4twO GoToColour failed with error: ${e.message}`);
+      alert(
+        `#bG4twO GoToColour failed with error: ${
+          e instanceof Error ? e.message : JSON.stringify(e)
+        }`
+      );
     }
   };
 
